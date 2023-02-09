@@ -23,21 +23,21 @@ The administration has ignored:
 
 We can see clearly from the local private school data that public school losses were principally to local private schools.
 
+Since elementary school are first on the chopping block - let's look at that:
 
 P-3 enrollment, for the school year starting in 2019/20 - 2021/22:
-- Bellevue public schools lost 1228 (-22%)
-- Bellevue private schools gained 879 (+67%)
+- Bellevue public schools lost 1354, (-19.8%)
+- Bellevue private schools gained 1282 (+77.6%)
 
-For every 100 lost from the public district, private gained 71. 
+**For every 100 lost from the public district, private gained 95.**
 
-K-5 (2019/20 - 2021/22)
+K-5 (2019/20 - 2021/22):
 - Bellevue public lost: 1143 (-12.7%)
-- Bellevue private gained: 1035.0 (+53%)
+- Bellevue private gained: 947 (+58%)
 
-90 were gained by private for every 100 lost to private schools.
+**83 were gained by private for every 100 lost to private schools.**
 
-
-Brandon Adams has perfromed a similar analysis and found similar loss (85 per 100).
+Brandon Adams has perfromed a similar analysis and found similar transfer to private (85 per 100).
 https://mostlywashington.substack.com/p/how-do-births-and-housing-prices
 
 Feedback is welcome. (Perhaps submit an issue)
