@@ -22,7 +22,7 @@ def timed(func=None):
         def timed(*args, **kw):
             t = time.time()
             result = func(*args, **kw)
-            print("**** {:<10.4}s : {}".format(time.time() - t, name))
+            print("**** {:<10.2}seconds : {}".format(time.time() - t, name))
             return result
 
         return timed
@@ -711,7 +711,7 @@ if __name__ == "__main__":
                 savedir=a.filename()
             )
 
-            for grade in ["Elementary", "Middle", "High", "K"]:
+            for grade in ["Elementary", "Middle", "High"]:
                 a = public.since(2019, False).grades(grade)
                 b = private.since(2019, False).grades(grade)
                 DataSet.stack(

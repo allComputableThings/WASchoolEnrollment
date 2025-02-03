@@ -190,6 +190,7 @@ def privateData():
     d2021 = pd.read_excel('WA_privateschools/2021-22 Private School Enrollment (Website).xlsx')
     d2022 = pd.read_excel('WA_privateschools/2022 - 2023 Private School Enrollment (website).xlsx')
     d2023 = pd.read_excel('WA_privateschools/2023 - 2024 Private School Enrollment (website).xlsx')
+    d2024 = pd.read_excel('WA_privateschools/2024-2025 Private School Enrollment Data.xlsx')
 
     def d2018normalized():
         # Normalize 2018 --- Not used. Format has quite a lot difference. Suspicious of the changes
@@ -330,6 +331,9 @@ def privateData():
     def d2023normalized():
         return _normalize(d2023, year=2023)
 
+    def d2024normalized():
+        return _normalize(d2024, year=2024)
+
     def normalizeAddresses(df):
         df = df.copy()
 
@@ -357,7 +361,13 @@ def privateData():
 
     # 2018 seems to have some very different reporting. Not sure it is consistent. Dropped here
     dAll = pd.concat(
-        [d2019normalized(), d2020normalized(), d2021normalized(), d2022normalized(), d2023normalized()]).reindex()
+        [d2019normalized(),
+         d2020normalized(),
+         d2021normalized(),
+         d2022normalized(),
+         d2023normalized(),
+         # d2024normalized()
+         ]).reindex()
     # dAll = pd.concat([d2022_, ]).reindex()
     # Place the important data in the first columns.
     dAll = dAll[allFinalCols + list(set(dAll.columns) - set(allFinalCols))].sort_values(
