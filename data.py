@@ -41,6 +41,7 @@ def publicData():
         2022: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2022-23_School_Year.csv'),
         #   2023: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2023-24_School_Year_20240130.csv'),
         2023: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2023-24_School_Year_20240312.csv'),
+        2024: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2024-25_School_Year_-_Preliminary_20250203.csv'),
         #   2022: bellevue2023()
     }
 
@@ -53,6 +54,8 @@ def publicData():
         'Pre-Kindergarten': 'P',
         'Kindergarten': 'K',
         'Half-day Kindergarten': 'K',  # ?
+        'Half-Day Kindergarten': 'K',  # ?
+        'Transition to Kindergarten': 'K',
         '1st Grade': '1',
         '2nd Grade': '2',
         '3rd Grade': '3',
@@ -65,6 +68,20 @@ def publicData():
         '10th Grade': '10',
         '11th Grade': '11',
         '12th Grade': '12',
+        'Total Pre-K': 'P',
+        'KG': 'K',
+        'Grade 1': '1',
+        'Grade 2': '2',
+        'Grade 3': '3',
+        'Grade 4': '4',
+        'Grade 5': '5',
+        'Grade 6': '6',
+        'Grade 7': '7',
+        'Grade 8': '8',
+        'Grade 9': '9',
+        'Grade 10': '10',
+        'Grade 11': '11',
+        'Grade 12': '12',
     }
 
     # Cleanup each CSV file
@@ -96,6 +113,7 @@ def publicData():
     print("Total WA public enrollment by year")
     # display(dAll.groupby("Year")["Total"].sum())
     return pubdataNormalized
+
 
 @functools.cache
 def privateData():
@@ -146,6 +164,7 @@ def privateData():
                 'G12 TOTAL': '12',
 
                 'PreK': 'P',
+                'Total Pre-K': 'P',
                 'KG': 'K',
                 'Grade 1': '1',
                 'Grade2': '2',
@@ -300,7 +319,7 @@ def privateData():
     def _normalize(df, year):
         df = df.rename(columns=gradeMap).rename(
             columns={'ZIP': "Zipcode",
-                     "City": "Region",   # District
+                     "City": "Region",  # District
                      "Address": "Street Address"})
         print(df.columns)
         df[grades]  # The grade columns should all exist
@@ -366,7 +385,7 @@ def privateData():
          d2021normalized(),
          d2022normalized(),
          d2023normalized(),
-         # d2024normalized()
+         d2024normalized()
          ]).reindex()
     # dAll = pd.concat([d2022_, ]).reindex()
     # Place the important data in the first columns.
@@ -396,6 +415,3 @@ def privateData():
     print("\nTotal WA private enrollment by year")
     # display(dAll.groupby("Year")["Total"].sum())
     return dAll
-
-
-
