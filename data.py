@@ -41,7 +41,8 @@ def publicData():
         2022: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2022-23_School_Year.csv'),
         #   2023: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2023-24_School_Year_20240130.csv'),
         2023: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2023-24_School_Year_20240312.csv'),
-        2024: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2024-25_School_Year_-_Preliminary_20250203.csv'),
+        # 2024: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2024-25_School_Year_-_Preliminary_20250203.csv'),
+        2024: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2024-25_School_Year_20250717.csv'),
         #   2022: bellevue2023()
     }
 

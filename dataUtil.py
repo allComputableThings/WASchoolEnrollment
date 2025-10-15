@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import math
 
 import data
+from plot import do_plot
 
 matplotlib.rcParams["axes.formatter.limits"] = (-99, 99)
 
@@ -513,6 +514,7 @@ class DataSet(Updateable):
             # plt.ylabel("Enrollment")
             plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))  # loc='lower right')
             plt.tight_layout()
+            # do_plot()
 
             pltShow()
             saveSVGFig(f, self.filename(post="_cohorts.svg", addDir="schoolCohorts"))
@@ -773,6 +775,6 @@ if __name__ == "__main__":
 
 
     display = noOp
-    pltShow = noOp
+    # pltShow = noOp
 
     run()

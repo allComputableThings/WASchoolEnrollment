@@ -20,8 +20,9 @@ The Bellevue school district has argued:
 
 The administration has ignored:
 
-* parent dissatisfaction in the private school district
+* parent dissatisfaction in the public school district, particular over school closures
 * the boom in personal finances during COVID that made private school more affordable to homeowners able to refinance to low monthly payments and take equity out of their home.
+* Bellevue's population is composed heavily of migrant workers, and worker migration is largely unmodeled.
 
 We can see clearly from the local private school data that public school losses were principally to local private schools.
 
