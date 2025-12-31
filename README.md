@@ -49,3 +49,9 @@ Feedback is welcome. (Perhaps submit an issue)
 I've published the analysis in workbook form so that data processing steps can be verified (and corrected), if necessary.
 
 The analysis is for Bellevue, but its easily modified for difference districts by changing the regionSubstring (a regular expression may also be used for complex district selection).
+
+
+* Public school data: https://ospi.k12.wa.us/data-reporting/data-portal
+* Public schools directory: https://eds.ospi.k12.wa.us/DirectoryEDS.aspx?_gl=1*sgzoun*_ga*MzEwMTc3NDYxLjE3NTczNTA2ODI.*_ga_SQS5QZLGMR*czE3NjA5MTA5NjMkbzgkZzEkdDE3NjA5MTA5NzMkajUwJGwwJGgw*_ga_ZKSN9461S2*czE3NjA5MTA5NjMkbzgkZzEkdDE3NjA5MTA5NzMkajUwJGwwJGgw
+* Private school enrollment data: https://sbe.wa.gov/our-work/private-schools#Private%20School%20Enrollment
+* Private schools directory: https://sbe.wa.gov/our-work/private-schools#ApprovedSchoolsList

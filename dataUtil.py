@@ -1,6 +1,5 @@
 import dataclasses
 import os
-import re
 import time
 from functools import cached_property
 
@@ -9,12 +8,17 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import math
-
+import re
 import data
-from plot import do_plot
+from schools_directory import ZIP, SCHOOL_NAME, DISTRICT_NAME
 
+SHOULD_SHOW = False
 matplotlib.rcParams["axes.formatter.limits"] = (-99, 99)
 
+def noOp(*args, **kw):
+    pass
+
+display = noOp
 
 def timed(func=None):
     def timed(func):
@@ -23,7 +27,7 @@ def timed(func=None):
         def timed(*args, **kw):
             t = time.time()
             result = func(*args, **kw)
-            print("**** {:<10.2}seconds : {}".format(time.time() - t, name))
+            print("**** {:<10.2f}seconds : {}".format(time.time() - t, name))
             return result
 
         return timed
@@ -32,7 +36,7 @@ def timed(func=None):
 
 
 def clean(f):
-    return f.replace(" ", "_").replace(",", "_").replace("/", "_").replace("__", "_")
+    return f.replace(" ", "_").replace(",", "_").replace("/", "_").replace("__", "_").replace("-", "_")
 
 
 nameYears = [
@@ -139,7 +143,8 @@ def saveSVGFig(plt, filename):
 
 
 def pltShow():
-    plt.show()
+    if SHOULD_SHOW:
+        plt.show()
 
 
 def fixAxis():
@@ -162,6 +167,9 @@ class DataSet(Updateable):
     # selection: str = "Washington"
     path: tuple[str] = ()
 
+    def addPath(self, path):
+        return self.update(path = self.path+(path,) )
+
     @cached_property
     def totalsByYear(self):
         df = self.df[["Year", "Total"]]
@@ -170,7 +178,7 @@ class DataSet(Updateable):
         return s
 
     @staticmethod
-    def stack(*series, xlabel=None, ylabel=None, title=None, savedir=None):
+    def plotStack(*series, xlabel=None, ylabel=None, title=None, savedir=None):
         df = pd.DataFrame({s.name: s for s in series})
 
         f = plt.figure(figsize=(10, 6))
@@ -223,7 +231,7 @@ class DataSet(Updateable):
         # pltShow()
         # return plt
 
-    def county(self, county):
+    def select_county(self, county):
         df = self.df[self.df["County"].astype(str).str.contains(county)]
         names = df["County"].unique()
         print("Counties:", ", ".join(list(names)))
@@ -235,18 +243,18 @@ class DataSet(Updateable):
             path=self.path + (selection,)
         )
 
-    def school(self, school):
+    def select_school(self, school):
         return self.update(
-            df=self.df[self.df["School Name"] == school],
+            df=self.df[self.df[SCHOOL_NAME] == school],
             # selection=school,
             path=self.path + (school,)
         )
 
     @cached_property
     def schools(self):
-        return list(self.df["School Name"].unique())
+        return list(self.df[SCHOOL_NAME].unique())
 
-    def since(self, year, addPath=True):
+    def select_since(self, year, addPath=True):
         return self.update(
             df=self.df[self.df["Year"] >= year],
             # selection=f">={year}",
@@ -254,7 +262,7 @@ class DataSet(Updateable):
         )
 
     # @cached_property
-    def years(self, years, name=None):
+    def select_years(self, years, name=None):
         assert not isinstance(years, str)
         if name is None:
             name = ",".join(list(years))
@@ -265,7 +273,7 @@ class DataSet(Updateable):
             path=self.path + (name,)
         )
 
-    def grades(self, grades, name=None):
+    def select_grades(self, grades, name=None):
         if isinstance(grades, str):
             name = name or grades
             grades = name2Years[name]
@@ -280,15 +288,25 @@ class DataSet(Updateable):
         )
 
     # @cached_property
-    def region(self, region, title=None):
-        # Trim data to a particular school district
-        if not isinstance(region, str):
-            df = self.df[self.df["Region"].astype(str).str.lower().str.match(region)]
-        else:
-            df = self.df[self.df["Region"].astype(str).str.lower().str.contains(region.lower())]
-        names = df["Region"].unique()
-        print("Regions:", ", ".join(list(names)))
+    # def regions(self):
+    #     return df["Region"].unique()
 
+    # @cached_property
+    def select_region(self, region, title=None):
+        # Trim data to a particular school district
+        if isinstance(region, str) and "*" in region:
+            region = re.compile(region)
+
+        if not isinstance(region, str):
+            df = self.df[self.df[DISTRICT_NAME].astype(str).str.match(region)]
+        else:
+            df = self.df[self.df[DISTRICT_NAME].astype(str).str.lower().str.contains(region.lower())]
+
+        names = df[DISTRICT_NAME].unique()
+        print("Regions:", list(names))
+
+        if len(df)==0:
+            raise Exception(f"Empty region: {region}")
         selection = title or (names[0] if len(names) == 1 else region)
         return self.update(
             df=df,
@@ -296,16 +314,65 @@ class DataSet(Updateable):
             path=self.path + (selection,)
         )
 
+    def select_city(self, city, title=None):
+        # Trim data to a particular school district
+        if isinstance(city, str) and "*" in city:
+            city = re.compile(city)
+
+        if not isinstance(city, str):
+            df = self.df[self.df['City'].astype(str).str.match(city)]
+        else:
+            df = self.df[self.df['City'].astype(str).str.lower().str.contains(city.lower())]
+
+        names = df['City'].unique()
+        print("Select city:", list(names))
+
+        if len(df)==0:
+            raise Exception(f"Empty city: {city}")
+        selection = title or (names[0] if len(names) == 1 else city)
+        return self.update(
+            df=df,
+            # selection=selection,
+            path=self.path + (selection,)
+        )
+
+    def select_zips(self, zips, title=None):
+        # Trim data to a particular school district
+        df = self.df[self.df[ZIP].isin(zips)]
+        if len(df)==0:
+            raise Exception(f"Empty zips: {zips}")
+        print(f"Search {title} for zips: {sorted((int(s) for s in set(zips)))}")
+        # print(f"Using schools:")
+        d = df.set_index(SCHOOL_NAME)
+        for s in sorted((df[SCHOOL_NAME].unique())):
+            d_ = d[d.index==s]
+            d_ = d_[["City", ZIP]].drop_duplicates()
+            # if len(d_)==1:
+            #     city,zip = d_.iloc[0]
+            #     print(f"{s} {city} {zip}")
+            # elif len(d)>=2:
+            if 1:
+                print(f"{s}")
+                for i, (city,zip) in d_.iterrows():
+                    print(f"  - {city} {zip}")
+        print(f"Schools matched in cities: {sorted(set(df['City']))}")
+        print(f"Schools matched with zips: {sorted(set(df[ZIP]))}")
+        return self.update(
+            df=df,
+            path=self.path + (title,)
+        )
+
+
     @timed
     def reportRegions(self):
         print("reportRegions", ", ".join(self.path))
         dAllRegionOfInterest = self.df
         print(f'Regions considered:')
-        display(dAllRegionOfInterest["Region"].unique())
+        display(dAllRegionOfInterest[DISTRICT_NAME].unique())
 
-        print(f'\nSchools reporting: {dAllRegionOfInterest["School Name"].unique().size}.')
-        display(list(dAllRegionOfInterest["School Name"].unique()))
-        zeroReportedAnyYear = dAllRegionOfInterest.groupby("School Name")["Total"].sum()
+        print(f'\nSchools reporting: {dAllRegionOfInterest[SCHOOL_NAME].unique().size}.')
+        display(list(dAllRegionOfInterest[SCHOOL_NAME].unique()))
+        zeroReportedAnyYear = dAllRegionOfInterest.groupby(SCHOOL_NAME)["Total"].sum()
         zeroReportedAnyYear = zeroReportedAnyYear[zeroReportedAnyYear == 0]
 
         print(f'\nSchools reporting 0 enrollment (any year): {zeroReportedAnyYear.size}')
@@ -332,9 +399,9 @@ class DataSet(Updateable):
         print("plotSchoolPercentGrowth", yearStart, ", ".join(self.path))
 
         def genGrowthPercent(df):
-            schools = df["School Name"].unique()
+            schools = df[SCHOOL_NAME].unique()
             for school in schools:
-                d = df[df["School Name"] == school]
+                d = df[df[SCHOOL_NAME] == school]
                 d = d[~(d["Total"].isna())]
                 if len(d) == 0: continue
 
@@ -361,9 +428,9 @@ class DataSet(Updateable):
         print("plotSchoolTotalGrowth", yearStart, ", ".join(self.path))
 
         def genGrowth(df):
-            schools = df["School Name"].unique()
+            schools = df[SCHOOL_NAME].unique()
             for school in schools:
-                d = df[df["School Name"] == school]
+                d = df[df[SCHOOL_NAME] == school]
                 d = d[~(d["Total"].isna())]
                 if len(d) == 0: continue
                 firstYear = d["Year"].min()
@@ -388,9 +455,9 @@ class DataSet(Updateable):
         print("plotSchoolEnrollment", yearStart, ", ".join(self.path))
 
         def genTotals(df):
-            schools = df["School Name"].unique()
+            schools = df[SCHOOL_NAME].unique()
             for school in schools:
-                d = df[df["School Name"] == school]
+                d = df[df[SCHOOL_NAME] == school]
                 d = d[~(d["Total"].isna())]
                 # if school=="Highland Middle School":  1 student in grade 5 :-/
                 #     print("SCHOOL", school)
@@ -407,6 +474,42 @@ class DataSet(Updateable):
                            title=title, xlabel='Year (start)', ylabel='Enrollment Growth')
             saveSVGFig(f, self.filename(post="_enrollment.svg"))
         matplotlib.pyplot.close()
+
+    @timed
+    def plotSchools(self, addDir=""):
+        df = self.df
+
+        def lastYearTotal(s):
+            _df = df[df[SCHOOL_NAME] == s]
+            yearMax = _df["Year"].max()
+            return -(_df[_df["Year"] == yearMax]["Total"].sum())
+
+        def plotSchool(df, schooName):
+            data = df[df[SCHOOL_NAME] == schooName].groupby("Year")["Total"].sum()
+            data = data[data > 0]
+            if len(data) > 0:
+                ax.plot(data.index.astype(int), data.values,
+                        label=schooName,
+                        marker='.', )
+            # fixAxis()
+
+        f, ax = plt.subplots(1, figsize=(12, 10))
+        ax.xaxis.get_major_locator().set_params(integer=True)
+        for schooName in sorted(self.schools, key=lastYearTotal):
+            plotSchool(df, schooName)
+
+        # if title is None:
+        #     title = ",".join(sorted(self.df["Grade"].unique()))
+        # plt.title(title)
+        plt.title(", ".join(self.path))
+        plt.ylabel("Enrollment")
+        plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))  # loc='lower right')
+        plt.tight_layout()
+
+        # defaultFigSize(f)
+        pltShow()
+
+        saveSVGFig(f, self.filename(post=".schools_enrollment_trend.svg", addDir=addDir))
 
     def _plot(self, genFunc, baselineYear, selectGrades, title, xlabel, ylabel):
         df = self.df
@@ -429,7 +532,7 @@ class DataSet(Updateable):
         return f
 
     def filename(self, pre="", post="", addDir=""):
-        fname = clean(f"{pre}{self.path[-1]}{post}")
+        fname = clean(f"{pre}{self.path[-1]}")+post
         dirs = ['plots'] + [clean(f) for f in self.path[:-1]]
         if addDir:
             dirs.append(addDir)
@@ -437,12 +540,57 @@ class DataSet(Updateable):
         if dirs:
             dirs = "/".join(dirs)
             os.makedirs(dirs, exist_ok=True)
-            return "/".join([dirs, fname])
+            return "/".join([dirs, fname]).replace("//","/")
         else:
             return fname
 
+    def plotGradeTierEnrollment(self, addDir="", post=""):
+        f, ax = plt.subplots(1, figsize=(8, 6))
+
+        for grade in ["Elementary", "Middle", "High"]:
+            data = self.select_grades(grade).df
+            data = data[["Year", "Total"]]
+            totals = data.groupby(["Year"])["Total"].sum().to_frame()
+            ax.plot(totals.index, totals.values, label=grade, marker='.', )
+
+        plt.ylim(ymin=0)
+        plt.title(", ".join(self.path))
+
+        plt.ylabel("Enrollment")
+        # plt.ylabel("Enrollment")
+        plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))  # loc='lower right')
+        plt.tight_layout()
+        # do_plot()
+
+        pltShow()
+        # path = clean("_".join(self.path))
+        saveSVGFig(f, self.filename(addDir=addDir, post=post )+f"/enrollment.gradeTier.svg")
+
+    def plotTotalEnrollment(self, addDir="", post=""):
+        f, ax = plt.subplots(1, figsize=(8, 6))
+
+        data = self.df
+        data = data[["Year", "Total"]]
+        totals = data.groupby(["Year"])["Total"].sum().to_frame()
+        ax.plot(totals.index, totals.values, marker='.', )
+
+        plt.ylim(ymin=0)
+        plt.title(", ".join(self.path))
+
+        plt.ylabel("Enrollment")
+        # plt.ylabel("Enrollment")
+        plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))  # loc='lower right')
+        plt.tight_layout()
+        # do_plot()
+
+        pltShow()
+        # path = clean("_".join(self.path))
+        saveSVGFig(f, self.filename(addDir=addDir, post=post )+f"/enrollment.total.svg")
+
+
+
     @timed
-    def plotCohortProgression(self):
+    def plotCohortProgression(self, addDir="", post=""):
         def plotGradeProgression(df):
             grades = ['K'] + [str(i) for i in range(1, 13)]
 
@@ -517,7 +665,12 @@ class DataSet(Updateable):
             # do_plot()
 
             pltShow()
-            saveSVGFig(f, self.filename(post="_cohorts.svg", addDir="schoolCohorts"))
+            # path = clean("_".join(self.path))
+            saveSVGFig(f, self.filename(addDir=addDir, post=post )+f".cohorts.svg")
+
+        if len(self.df)==0:
+            print("plotCohortProgression empty:", self.path)
+            return
 
         # if dfName is None:
         #     dfName = ",".join(self.path)
@@ -558,49 +711,18 @@ class DataSet(Updateable):
             #       d = d.assign(Year=d.index.values) #["Year"+cols]
 
             display(d)
+
             df2SVGFile(d.reset_index()[["Year"] + cols],
-                       self.filename(post="_cohorts_table.svg", addDir="schoolCohorts"))
+                       # self.filename(post="_cohorts_table.svg", addDir="schoolCohorts")
+                       self.filename(addDir=addDir, post=post)+f".cohorts_table.svg"
+                       )
+
+
         print(self.path, "<" * 20)
         matplotlib.pyplot.close()
 
     @timed
-    def plotSchools(self):
-        df = self.df
-
-        def lastYearTotal(s):
-            _df = df[df["School Name"] == s]
-            yearMax = _df["Year"].max()
-            return -(_df[_df["Year"] == yearMax]["Total"].sum())
-
-        def plotSchool(df, schooName):
-            data = df[df["School Name"] == schooName].groupby("Year")["Total"].sum()
-            data = data[data > 0]
-            if len(data) > 0:
-                ax.plot(data.index.astype(int), data.values,
-                        label=schooName,
-                        marker='.', )
-            # fixAxis()
-
-        f, ax = plt.subplots(1, figsize=(12, 10))
-        ax.xaxis.get_major_locator().set_params(integer=True)
-        for schooName in sorted(self.schools, key=lastYearTotal):
-            plotSchool(df, schooName)
-
-        # if title is None:
-        #     title = ",".join(sorted(self.df["Grade"].unique()))
-        # plt.title(title)
-        plt.title(", ".join(self.path))
-        plt.ylabel("Enrollment")
-        plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))  # loc='lower right')
-        plt.tight_layout()
-
-        # defaultFigSize(f)
-        pltShow()
-
-        saveSVGFig(f, self.filename(post="_school.svg"))
-
-    @timed
-    def plotGrades(self, grades=None, title=None):
+    def plotGrades(self, grades=None, title=None, addDir=""):
         df = self.df
 
         def lastYearTotal(s):
@@ -640,7 +762,7 @@ class DataSet(Updateable):
         # defaultFigSize(f)
         pltShow()
 
-        saveSVGFig(f, "/".join([self.filename(addDir='gradeEnrollment'), clean(f"{title}_gradeGroup.svg")]))
+        saveSVGFig(f, "/".join([self.filename()+f'/{addDir}grade_group_enrollment_trends', clean(f"{title}_gradeGroup.svg")]))
         matplotlib.pyplot.close()
 
 
@@ -649,13 +771,13 @@ def defaultFigSize(f, width=8):
     f.set_figheight(6)
 
 
-def publicData():
+def publicData() -> DataSet:
     return DataSet(df=data.publicData(),
                    # selection="Washington Public",
                    path=("Washington Public",))
 
 
-def privateData():
+def privateData() -> DataSet:
     return DataSet(df=data.privateData(),
                    # selection="Washington Private",
                    path=("Washington Private",))
@@ -678,103 +800,6 @@ def school2style(school):
     return s
 
 
-# [school2style(s) for s in sorted(dAllRegionOfInterest["School Name"].unique())]
+# [school2style(s) for s in sorted(dAllRegionOfInterest[SCHOOL_NAME].unique())]
 
 
-if __name__ == "__main__":
-    import openpyxl
-
-
-    def makePlots(public, private, schoolDetail=False):
-        # Cohort for all
-        for dfBase in [
-            public,
-            private,
-        ]:
-            dfBase.plotCohortProgression()
-
-        public.reportYearlyChangesSinceBaselineYear(2019)
-        private.reportYearlyChangesSinceBaselineYear(2019)
-
-        for ds in [
-            public,
-            private,
-        ]:
-            for name, gradeYears in gradeSets:
-                ds.plotGrades(name, title=name)
-
-        if 1:  # A vs B stack plots
-            a = public.since(2019, False)
-            b = private.since(2019, False)
-            DataSet.stack(
-                a.totalsByYear,
-                b.totalsByYear,
-                ylabel="Enrollment",
-                savedir=a.filename()
-            )
-
-            for grade in ["Elementary", "Middle", "High"]:
-                a = public.since(2019, False).grades(grade)
-                b = private.since(2019, False).grades(grade)
-                DataSet.stack(
-                    a.totalsByYear,
-                    b.totalsByYear,
-                    ylabel="Enrollment",
-                    savedir=a.filename()
-                )
-
-        if schoolDetail:
-            # Plot schools
-            for ds in [public, private]:
-                for name, gradeYears in gradeSets:
-                    ds.grades(name, name=name).plotSchools()
-
-            # Cohort for school
-            for dfBase in [public.school(s) for s in public.schools] \
-                          + [private.school(s) for s in private.schools]:
-                dfBase.plotCohortProgression()
-
-
-    gradeSets = [
-        ("Elementary", ['K'] + [str(s) for s in range(1, 6)]),
-        ("Middle", [str(s) for s in range(6, 9)]),
-        ("High", [str(s) for s in range(9, 13)]),
-        ("K-12", ['K'] + [str(s) for s in range(1, 13)]),
-        ("P-12", ['P', 'K'] + [str(s) for s in range(1, 13)]),
-        ("P-5", ['P', 'K'] + [str(s) for s in range(1, 6)]),
-        ("K-5", ['K'] + [str(s) for s in range(1, 6)]),
-    ]
-
-
-    def run():
-
-        public = publicData()
-        private = privateData()
-
-        makePlots(public.region("Lake Washington School District",
-                                title="LWSD"),
-                  private.region(re.compile("(kirkland)|(redmond)|(sammamish)"),
-                                 title="Kirkland/Redmond/Sammamish"
-                                 ), schoolDetail=True)
-
-        makePlots(public.region("Seattle"), private.region("Seattle"), schoolDetail=True)
-
-        makePlots(public.region("Bellevue"), private.region("Bellevue"), schoolDetail=True)
-        # State wide
-        makePlots(public, private)
-
-        # King county (public only)
-        for dfBase in [public.county("King")]:
-            dfBase.plotCohortProgression()
-
-        pass
-
-
-    def noOp(*args, **kw):
-        pass
-
-
-    display = noOp
-    # pltShow = noOp
-
-    run()

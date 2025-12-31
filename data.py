@@ -1,13 +1,20 @@
 import functools
-import os
 import pandas as pd
+from jinja2.filters import do_capitalize
 
-publicDataRoot = os.path.join(os.path.split(__file__)[0], "OSPI_publicschools/")
-privateDataRoot = os.path.join(os.path.split(__file__)[0], "WA_privateschools/")
+from schools_directory import SCHOOL_NAME, DISTRICT_NAME
+from util import fixCaps
+
+
+# assert directory.schoolname_city_to_zip("Yakima Adventist Christian School","Yakima") == 98908
+# directory.schoolname_city2zip("Yakima Adventist Christian School","Yakima")
 
 
 @functools.cache
-def publicData():
+def publicData() -> pd.DataFrame :
+    """
+    :return: A DataDrame with columns: 'Year', SCHOOL_NAME, DISTRICT_NAME, "Grade", "Total", "County"
+    """
     # 2022-23 For Bellevue only. One school at a time. *Sigh*
     # https://washingtonstatereportcard.ospi.k12.wa.us/ReportCard/ViewSchoolOrDistrict/101387
 
@@ -23,7 +30,7 @@ def publicData():
     #                 columns={'Organization Name': 'SchoolName', 'School Year': "Year", 'Gradelevel': 'GradeLevel',
     #                          'Number Of Students': 'All Students'})
     #             df['DistrictName'] = 'Bellevue'
-    #             # print(df['School Name'].unique(), filename)
+    #             # print(df[SCHOOL_NAME].unique(), filename)
     #             yield df
     #
     #     return pd.concat(gen())
@@ -46,10 +53,10 @@ def publicData():
         #   2022: bellevue2023()
     }
 
-    # Normalize data - just want ['Year', 'School Name', "Region", "Grade", "Total"]
+    # Normalize data - just want ['Year', SCHOOL_NAME, "Region", "Grade", "Total"]
     # This format is common the this collections of workbooks
     years = list(year2Pubdata.keys())
-    datacols = ['Year', 'School Name', "Region", "Grade", "Total", "County"]
+    datacols = ['Year', SCHOOL_NAME, DISTRICT_NAME, "Grade", "Total", "County", "SchoolCode"]
     grades = ['K', 'P'] + list(range(1, 13))  # NB. range in Python is exclusive of last values\
     gradeMap = {  # For standardize grade categories
         'Pre-Kindergarten': 'P',
@@ -88,18 +95,26 @@ def publicData():
     # Cleanup each CSV file
     def mapData(year, df):
         df = df.copy()
-        df = df.rename(columns={'SchoolName': 'School Name', 'DistrictName': 'Region', 'All Students': 'Total'})
+        df = df.rename(columns={'School Name': SCHOOL_NAME,
+                                'DistrictName': DISTRICT_NAME,
+                                'All Students': 'Total'})
         df['Year'] = year
         df = df[df['GradeLevel'] != 'AllGrades']
         df = df[df['GradeLevel'] != 'All Grades']
         df['Grade'] = df['GradeLevel'].replace(gradeMap)
-        df = df[df['School Name'] != 'State Total']
-        df = df[df['School Name'] != 'District Total']
+        df = df[df[SCHOOL_NAME] != 'State Total']
+        df = df[df[SCHOOL_NAME] != 'District Total']
         return df[datacols + list(set(df.columns) - set(datacols))]
 
     print(years)
     year2PubdataNormalized = {year: mapData(year, df) for (year, df) in year2Pubdata.items()}
     pubdataNormalized = pd.concat(year2PubdataNormalized.values()).reindex()
+    pubdataNormalized[DISTRICT_NAME] = (pubdataNormalized[DISTRICT_NAME]
+                                   .str.strip()
+                                   .str.replace("Woononville", "Woodinville"))
+
+    pubdataNormalized.loc[pubdataNormalized["SchoolCode"].isna(), "SchoolCode"] = -1
+    pubdataNormalized["SchoolCode"] = pubdataNormalized["SchoolCode"].astype(int)
     print(f"Columns in:  {pd.concat(year2Pubdata.values()).columns}")
     print(f"Columns out: {pubdataNormalized.columns}")
 
@@ -107,17 +122,18 @@ def publicData():
     print(pubdataNormalized.columns)
     print("Grade", sorted(pubdataNormalized["Grade"].unique()))
     print("Year", sorted(pubdataNormalized["Year"].unique()))
-    print(pubdataNormalized["County"].unique())
+    print("Counties:", pubdataNormalized["County"].unique())
     print("County", pubdataNormalized.index.size, pubdataNormalized["County"].isna().size)
     # display(pubdataNormalized[pubdataNormalized["County"].isna()])
-    dAll = pubdataNormalized.copy()
+    # dAll = pubdataNormalized.copy()
     print("Total WA public enrollment by year")
+
     # display(dAll.groupby("Year")["Total"].sum())
     return pubdataNormalized
 
 
 @functools.cache
-def privateData():
+def privateData() -> pd.DataFrame :
     gradeMap = {'Total PreK': 'P',
                 'Total KG': 'K',
                 'Total G1': '1',
@@ -184,14 +200,14 @@ def privateData():
 
     # Final columns, except Grade, Total
     datacols = [
-        'School Name',
-        # 'Street Address', # Missing in some
+        SCHOOL_NAME,
         # Some are "District Name", some are "City"
         # Will use to hold both and search for substrings: "Bellevue"
-        "Region",
+        'Street Address', # Missing in some
+        "City",
         # 'State',
-        # 'Zipcode', Missing in 2018
-        # 'County'
+        'Zipcode', #Missing in 2018
+        # 'County',
         'Year',  # Added
     ]
     allFinalCols = datacols + ["Grade", "Total"]
@@ -210,98 +226,105 @@ def privateData():
     d2021 = pd.read_excel('WA_privateschools/2021-22 Private School Enrollment (Website).xlsx')
     d2022 = pd.read_excel('WA_privateschools/2022 - 2023 Private School Enrollment (website).xlsx')
     d2023 = pd.read_excel('WA_privateschools/2023 - 2024 Private School Enrollment (website).xlsx')
-    d2024 = pd.read_excel('WA_privateschools/2024-2025 Private School Enrollment Data.xlsx')
+    # d2024 = pd.read_excel('WA_privateschools/2024-2025 Private School Enrollment Data.xlsx')
+    d2024 = pd.read_excel('WA_privateschools/2024-2025 Private School Enrollment Data (Amended March 2025)_0.xlsx')
 
     def d2018normalized():
         # Normalize 2018 --- Not used. Format has quite a lot difference. Suspicious of the changes
-        # d2018_ = d2018.rename(columns={"District Name": "Region"}) # "City" is missing in this dataset. We only have "District Name"
+        # d2018_ = d2018.rename(columns={"District Name": DISTRICT_NAME}) # "City" is missing in this dataset. We only have "District Name"
         # d2018_['Grade'] = d2018['Grade'].replace(gradeMap)
         # d2018_['Year'] = 2018
-        # d2018_ = d2018_[d2018_['School Name'].notnull()]
+        # d2018_ = d2018_[d2018_[SCHOOL_NAME].notnull()]
         # print(d2018_.shape, list(d2018_[allFinalCols].columns))
         pass
 
     def d2019normalized():
         # Normalize 2019
-        df = d2019.rename(columns=gradeMap)
-        df = df.rename(columns={"Total": "_Total", "Name of School": "School Name", "City": "Region"})
+        df = d2019.rename(columns=gradeMap).rename(columns={"School Name": SCHOOL_NAME})
+        df = df.rename(columns={"Total": "_Total", "Name of School": SCHOOL_NAME,
+                                # "City": DISTRICT_NAME
+                                })
         # print(sorted(df.columns))
         df = df.melt(id_vars=set(df.columns) - set(grades), value_vars=grades, var_name="Grade", value_name="Total")
         df['Year'] = 2019
-        df = df[df['School Name'].notnull()]
+        df = df[df[SCHOOL_NAME].notnull()]
         print(df.shape, list(df[allFinalCols].columns))
         checkNulls(df)
         return df
 
     def d2020normalized():
         # Normalize 2020
-        df = d2020.rename(columns=gradeMap).rename(columns={"City": "Region"})
+        df = d2020.rename(columns=gradeMap).rename(columns={"School Name": SCHOOL_NAME})
         print(df.shape, list(df.columns))
         df[grades]  # The grade columns should all exist
         df = df.melt(id_vars=set(df.columns) - set(grades), value_vars=grades, var_name="Grade", value_name="Total")
         df['Grade'] = df['Grade'].replace(gradeMap)
         df['Year'] = 2020
-        df = df[df['School Name'].notnull()]
+        df = df[df['City'].notnull()]
         checkNulls(df)
-        # display(df[df["Region"].isnull()])
+        # display(df[df[DISTRICT_NAME].isnull()])
         # display(d2020["City"].isnull().sum())
         print(f'null cities: {d2020["City"].isnull().sum()}')
         # print(f'Schools with null cities:')
-        # for school in d2020.loc[d2020["City"].isnull(),"School Name"].unique():
-        #     display(d2020[d2020["School Name"]==school])
+        # for school in d2020.loc[d2020["City"].isnull(),SCHOOL_NAME].unique():
+        #     display(d2020[d2020[SCHOOL_NAME]==school])
         # print(f'Schools with null totals:')
-        # for school in df.loc[df["Total"].isnull(),"School Name"].unique():
-        #     display(d2020[d2020["School Name"]==school])
+        # for school in df.loc[df["Total"].isnull(),SCHOOL_NAME].unique():
+        #     display(d2020[d2020[SCHOOL_NAME]==school])
 
         # display(df[df["Total"].isnull()])
-        # display(df[df["Region"].isnull() & (df["School Name"]=="Carden Country School")])
-        # display(df[df["School Name"]=="Carden Country School"])
+        # display(df[df[DISTRICT_NAME].isnull() & (df[SCHOOL_NAME]=="Carden Country School")])
+        # display(df[df[SCHOOL_NAME]=="Carden Country School"])
         return df
 
     # def d2021normalized():
     #     # Normalize 2020
-    #     df = d2020.rename(columns=gradeMap).rename(columns={"City": "Region"})
+    #     df = d2020.rename(columns=gradeMap).rename(columns={"City": DISTRICT_NAME})
     #     print(df.shape, list(df.columns))
     #     df[grades]  # The grade columns should all exist
     #     df = df.melt(id_vars=set(df.columns) - set(grades), value_vars=grades, var_name="Grade", value_name="Total")
     #     df['Grade'] = df['Grade'].replace(gradeMap)
     #     df['Year'] = 2021
-    #     df = df[df['School Name'].notnull()]
+    #     df = df[df[SCHOOL_NAME].notnull()]
     #     checkNulls(df)
-    #     # display(df[df["Region"].isnull()])
+    #     # display(df[df[DISTRICT_NAME].isnull()])
     #     # display(d2020["City"].isnull().sum())
     #     print(f'null cities: {d2020["City"].isnull().sum()}')
     #     # print(f'Schools with null cities:')
-    #     # for school in d2020.loc[d2020["City"].isnull(),"School Name"].unique():
-    #     #     display(d2020[d2020["School Name"]==school])
+    #     # for school in d2020.loc[d2020["City"].isnull(),SCHOOL_NAME].unique():
+    #     #     display(d2020[d2020[SCHOOL_NAME]==school])
     #     # print(f'Schools with null totals:')
-    #     # for school in df.loc[df["Total"].isnull(),"School Name"].unique():
-    #     #     display(d2020[d2020["School Name"]==school])
+    #     # for school in df.loc[df["Total"].isnull(),SCHOOL_NAME].unique():
+    #     #     display(d2020[d2020[SCHOOL_NAME]==school])
     #
     #     # display(df[df["Total"].isnull()])
-    #     # display(df[df["Region"].isnull() & (df["School Name"]=="Carden Country School")])
-    #     # display(df[df["School Name"]=="Carden Country School"])
+    #     # display(df[df[DISTRICT_NAME].isnull() & (df[SCHOOL_NAME]=="Carden Country School")])
+    #     # display(df[df[SCHOOL_NAME]=="Carden Country School"])
     #     return df
 
     def checkNulls(df):
         schools = set()
         for col in ['Grade', 'Year', 'Total',
-                    'School Name',
-                    'Region',
+                    SCHOOL_NAME,
+                    'City',
                     #                 'Street Address'
                     ]:
             mask = (df[col].isna() | df[col].isnull())
             if mask.sum():
                 print(f"{col} has {len(mask)} nulls")
-                schools.intersection(df.loc[mask, "School Name"].unique())
+                schools.intersection(df.loc[mask, SCHOOL_NAME].unique())
 
         for sname in schools:
-            display(df[df["School Name"] == sname])
+            display(df[df[SCHOOL_NAME] == sname])
 
     # print(d2021.columns)
     def d2021normalized():
         df = d2021.rename(columns=gradeMap).rename(
-            columns={"Name of School": "School Name", 'ZIP': "Zipcode", "City": "Region"})
+            columns={"Name of School": SCHOOL_NAME,
+                     'ZIP': "Zipcode",
+                     "School Name": SCHOOL_NAME,
+                     # "City": DISTRICT_NAME
+                     })
         df[grades]  # The grade columns should all exist
         df = df.melt(id_vars=set(df.columns) - set(grades), value_vars=grades, var_name="Grade", value_name="Total")
         df['Grade'] = df['Grade'].replace(gradeMap)
@@ -309,7 +332,7 @@ def privateData():
         df.loc[df["Total"].isna(), "Total"] = 0
         df["Total"] = df["Total"].astype(int)
 
-        df = df[df['School Name'].notnull()]
+        df = df[df[SCHOOL_NAME].notnull()]
         checkNulls(df)
         print(df.shape, list(df[allFinalCols].columns))
         return df
@@ -320,7 +343,8 @@ def privateData():
     def _normalize(df, year):
         df = df.rename(columns=gradeMap).rename(
             columns={'ZIP': "Zipcode",
-                     "City": "Region",  # District
+                     # "City": DISTRICT_NAME,  # District
+                     "School Name": SCHOOL_NAME,
                      "Address": "Street Address"})
         print(df.columns)
         df[grades]  # The grade columns should all exist
@@ -329,21 +353,21 @@ def privateData():
         df['Year'] = year
         df.loc[df["Total"].isna(), "Total"] = 0
         df["Total"] = df["Total"].astype(int)
-        df = df[df['School Name'].notnull()]
+        df = df[df[SCHOOL_NAME].notnull()]
 
         checkNulls(df)
         #     print(df.shape, list(df[allFinalCols].columns))
         print(df.shape, list(df.columns))
         return df
 
-    # Index(['School Name', 'Street Address', 'Region', 'State', 'Zipcode', 'P',
+    # Index([SCHOOL_NAME, 'Street Address', DISTRICT_NAME, 'State', 'Zipcode', 'P',
     #        'PK Total.1', 'K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
     #        '11', '12', 'K12 Total Reported'],
     #       dtype='object')
     def d2022normalized():
         return _normalize(d2022, year=2022)
 
-    # Index(['School Name', 'Street Address', 'Region', 'State', 'Zipcode', 'County',
+    # Index([SCHOOL_NAME, 'Street Address', DISTRICT_NAME, 'State', 'Zipcode', 'County',
     #        'District', 'PreK TOTAL', 'KG TOTAL', 'G1 TOTAL', 'G2 TOTAL',
     #        'G3 TOTAL', 'G4 TOTAL', 'G5 TOTAL', 'G6 TOTAL', 'G7 TOTAL', 'G8 TOTAL',
     #        'G9 TOTAL', 'GI0 TOTAL', 'G11 TOTAL', 'G12 TOTAL'],
@@ -369,15 +393,15 @@ def privateData():
         df["Street Address"] = df["Street Address"].apply(simplifyAddr)
         return df
 
-    def fixDuplicateAddress(df):
-        df_ = [["Region", "School Name", "Street Address"]].sort_values(["Region", "School Name", "Street Address"]) \
-            .drop_duplicates() \
-            .reset_index()
-        for idx, region, school, addr in df_[df_[["Region", "School Name"]].duplicated(keep=False)].itertuples():
-            mask = (df["Region"] == region) & (df["School Name"] == school)
-            newschool = f"{school} {addr}"
-            print(f"Renaming {repr(school)}, {repr(addr)} -> {repr(newschool)}")
-            df.loc[mask, "School Name"] = newschool
+    # def fixDuplicateAddress(df):
+    #     df_ = [[DISTRICT_NAME, SCHOOL_NAME, "Street Address"]].sort_values([DISTRICT_NAME, SCHOOL_NAME, "Street Address"]) \
+    #         .drop_duplicates() \
+    #         .reset_index()
+    #     for idx, region, school, addr in df_[df_[[DISTRICT_NAME, SCHOOL_NAME]].duplicated(keep=False)].itertuples():
+    #         mask = (df[DISTRICT_NAME] == region) & (df[SCHOOL_NAME] == school)
+    #         newschool = f"{school} {addr}"
+    #         print(f"Renaming {repr(school)}, {repr(addr)} -> {repr(newschool)}")
+    #         df.loc[mask, SCHOOL_NAME] = newschool
 
     # 2018 seems to have some very different reporting. Not sure it is consistent. Dropped here
     dAll = pd.concat(
@@ -391,28 +415,45 @@ def privateData():
     # dAll = pd.concat([d2022_, ]).reindex()
     # Place the important data in the first columns.
     dAll = dAll[allFinalCols + list(set(dAll.columns) - set(allFinalCols))].sort_values(
-        ["Year", "Grade", "School Name"])
-    dAll = dAll[~(dAll["School Name"].isnull())]  # Zap rows without school names
-    dAll = dAll[~(dAll["School Name"].astype(str) == 'NaN')]  # Zap rows without school names
-    dAll = dAll[~(dAll["School Name"].isna())]  # Zap rows without school names
-    dAll = dAll[dAll["School Name"] != "State Total"]  # Zap school total rows
+        ["Year", "Grade", SCHOOL_NAME])
+
+    dAll = dAll[dAll[SCHOOL_NAME].map(lambda s: isinstance(s, str))]  # Zap rows without string school names
+    dAll = dAll[~(dAll[SCHOOL_NAME].str.lower().str.contains("state total"))]  # Zap state total rows
     dAll.loc[dAll["Total"].isna(), "Total"] = 0
     dAll = dAll.astype({"Total": int})
     dAll = dAll.astype({"Year": int})
+    dAll = dAll[dAll["City"].map(lambda s: isinstance(s, str))]  # Zap rows without school names
+
+    city = dAll["City"]
+    city = city.replace({
+        "Woononville": "Woodinville",
+        "Issaqua": "Issaquah",
+        "Woodonville": "Woodinville",
+        "Bellvue": "Bellevue"
+    })
+    # Capitalize city name. (Fixes uppercase)
+    dAll["City"] = fixCaps(city)
+
+    # Capitalize school name. (Fixes uppercase)
+    dAll[SCHOOL_NAME] = fixCaps(dAll[SCHOOL_NAME])
+
     dAll = dAll.reset_index()
+
 
     # display(dAll[dAll["Street Address"].isna()])
     # dAll = normalizeAddresses(dAll)
     # dAll = fixDuplicateAddress(dAll)
 
     # There are a number of school in the data without a district or city, or a district of 0 for some reason.
-    # We'll just ignore them from bellevue processing since none are in Bellevie
-    # dAll = dAll[dAll["Region"].astype(str)!='0'] # 0 is not a region
+    # We'll just ignore them from bellevue processing since none are in Bellevue
+    # dAll = dAll[dAll["City"].astype(str)!='0'] # 0 is not a region
     print(f"Years reporting {dAll['Year'].unique()}")
 
     print("Schools reporting their city/district as 0")
-    # display(dAll[dAll["Region"].isnull()]["School Name"].unique())
+    # display(dAll[dAll[DISTRICT_NAME].isnull()][SCHOOL_NAME].unique())
 
     print("\nTotal WA private enrollment by year")
     # display(dAll.groupby("Year")["Total"].sum())
+    # d = dAll[[SCHOOL_NAME, "Street Address"]]
+    # d[d["Street Address"].isna()]
     return dAll
