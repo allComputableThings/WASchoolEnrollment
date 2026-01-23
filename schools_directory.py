@@ -140,7 +140,9 @@ if __name__=='__main__':
         # print(len(private.select_district(".*Northshore.*").df))
 
         # print(public.select_district(".*Issaquah.*").df)
-        zips = public.select_district(".*Issaquah.*").df[ZIP]
+        print(public.select_district("Snoqualmie Valley School District").df)
+        zips = public.select_district(".*Snoqualmie Valley School District.*").df[ZIP].unique()
+        # zips = public.select_district(".*Issaquah.*").df[ZIP]
         # print(private.select_district(".*Issaquah.*").df)
         print(private.select_zip(zips).df)
 

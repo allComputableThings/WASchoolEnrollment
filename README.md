@@ -1,13 +1,56 @@
 # Washington School Enrollment Data
 
-This project contains Python Jupyter workbooks as well as Microsoft PowerBI Desktop files summarizing changes in Washington school enrollment from state data.
+This project processes data from the OSPI Data Portal and SBE Data Portal to summarize changes in Washington school
+enrollment from state data (OPSI for public schoole and Washington State Board of Education for private schools).
+It should be noted that the private school data reported to SBE is voluntary reporting and likely under-estimates private
+school enrollment, and that reporting may be inconsistent from year to year with both *over* and under-estimation 
+of public school growth being possible consequences.
 
-Click the above links to:
+Generated are available in the `plots` directories:
 
-* https://github.com/stuz5000/WASchoolEnrollment/blob/main/enrollmentPublic.ipynb
-* https://github.com/stuz5000/WASchoolEnrollment/blob/main/enrollmentPrivate.ipynb
+* [Public school enrollment](plots/Washington_Public) by district
+* [Private school enrollment](plots/Washington_Private) by district by similar zip/city
 
-which summarize Bellevue specifically. Additionally, in the powerBI folder you can find a PBIX that will refresh data directly from the OSPI Data Portal for all schools in Washington State. This data is pre-filtered to purely Bellevue School District 405 data and can be visualized by the end user.
+
+Individual directories contains state-wide and county-wide (e.g. King county) views.
+
+Several kinds of plots are available:
+
+* Cohort progression plots. These track enrollment over time for a grade as it ages and progress. Of particular interest to
+  future enrollment are trends following a grade from Kindergarten. We see:
+  - recession in Kindergarten enrollment appears to have bottomed and is turning around.
+  - grades generally grow year-on-year. Because few births go on to initially enter the public system after Kindergarten, we should infer that
+    growth in the size of a grade as it ages is due one of the following causes: inward migration (foreign or domestic) 
+    into the state and its cities, and/or movement between public and homeschool and private.
+
+![Public Cohort Progression](plots/Washington_Public/State/cohorts.cohorts.svg)
+*State public school cohort trends*
+
+![Private Cohort Progression](plots/Washington_Private/State/cohorts.cohorts.svg)
+*State private school cohort trends*
+
+
+* Total enrollment plots:
+
+![Cohort](plots/Washington_Public/State/cohorts.cohorts.svg)
+*State public school cohort trends*
+
+![Cohort](plots/Washington_Private/State/cohorts.cohorts.svg)
+*State private school cohort trends*
+
+
+
+
+**Caution on interpretation of private school trends** 
+
+It is unclear whether some years had more private school reporting than others, which might significantly affect the interpretation of 
+private school trends. However, independent estimation of the number of children in a city can be obtained from county demographers.
+At least for Bellevue, we saw roughly a net-zero growth in the city's population of children via county demographers in the same period as 
+a (roughly) net-zero public/private transfer of students during and following COVID.
+
+
+
+
 
 Although Bellevue public school enrollment is briefly in decline, it is instructive to know where the loss is coming from.
 

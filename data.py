@@ -51,6 +51,7 @@ def publicData() -> pd.DataFrame :
         # 2024: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2024-25_School_Year_-_Preliminary_20250203.csv'),
         2024: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2024-25_School_Year_20250717.csv'),
         #   2022: bellevue2023()
+        2025: pd.read_csv("OSPI_publicschools/Report_Card_Enrollment_2025-26_School_Year_-_Preliminary_20260122.csv")
     }
 
     # Normalize data - just want ['Year', SCHOOL_NAME, "Region", "Grade", "Total"]
@@ -60,10 +61,10 @@ def publicData() -> pd.DataFrame :
     grades = ['K', 'P'] + list(range(1, 13))  # NB. range in Python is exclusive of last values\
     gradeMap = {  # For standardize grade categories
         'Pre-Kindergarten': 'P',
+        'Transition to Kindergarten': 'P',
         'Kindergarten': 'K',
         'Half-day Kindergarten': 'K',  # ?
         'Half-Day Kindergarten': 'K',  # ?
-        'Transition to Kindergarten': 'K',
         '1st Grade': '1',
         '2nd Grade': '2',
         '3rd Grade': '3',
@@ -104,6 +105,17 @@ def publicData() -> pd.DataFrame :
         df['Grade'] = df['GradeLevel'].replace(gradeMap)
         df = df[df[SCHOOL_NAME] != 'State Total']
         df = df[df[SCHOOL_NAME] != 'District Total']
+        df = df[(df[SCHOOL_NAME] != '') & ~(df[SCHOOL_NAME].isna())]
+        def to_int(x):
+            if isinstance(x, int):
+                return x
+            if isinstance(x, str):
+                if ',' in x:
+                    return int(x.replace(',', ''))
+            return int(x)
+        df['Total'] = df['Total'].apply(to_int)
+        # df['Total'] = df['Total'].astype(int)
+
         return df[datacols + list(set(df.columns) - set(datacols))]
 
     print(years)
@@ -377,31 +389,6 @@ def privateData() -> pd.DataFrame :
 
     def d2024normalized():
         return _normalize(d2024, year=2024)
-
-    def normalizeAddresses(df):
-        df = df.copy()
-
-        def simplifyAddr(a):
-            try:
-                a = a.upper().replace(".", "").replace("AVENUE", "AVE")
-                a = " ".join(a.split()[:3])
-                return a
-            except:
-                print("Faied address", a)
-                raise
-
-        df["Street Address"] = df["Street Address"].apply(simplifyAddr)
-        return df
-
-    # def fixDuplicateAddress(df):
-    #     df_ = [[DISTRICT_NAME, SCHOOL_NAME, "Street Address"]].sort_values([DISTRICT_NAME, SCHOOL_NAME, "Street Address"]) \
-    #         .drop_duplicates() \
-    #         .reset_index()
-    #     for idx, region, school, addr in df_[df_[[DISTRICT_NAME, SCHOOL_NAME]].duplicated(keep=False)].itertuples():
-    #         mask = (df[DISTRICT_NAME] == region) & (df[SCHOOL_NAME] == school)
-    #         newschool = f"{school} {addr}"
-    #         print(f"Renaming {repr(school)}, {repr(addr)} -> {repr(newschool)}")
-    #         df.loc[mask, SCHOOL_NAME] = newschool
 
     # 2018 seems to have some very different reporting. Not sure it is consistent. Dropped here
     dAll = pd.concat(

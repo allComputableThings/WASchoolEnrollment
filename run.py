@@ -137,13 +137,22 @@ def run():
     #     schools_directory.public.select_district(district_name)
     #     private.df.tail(10)
 
+    # King county (public only)
+    for county in ["King"]:
+        makePlots(public.select_county(county), private=None, schoolDetail=False)
+
+    # State wide
+    makePlots(public.addPath("State"), private.addPath("State"))
+
 
     for school_district, title, private_rule in [
+        ("Bellevue School District", "Bellevue",  {"city": "Bellevue"}),
+        ("Snoqualmie Valley School District", "Snoqualmie Valley", {}),
+        ("Riverview School District", "Riverview", {}), # Carnation, Duvall
         ("Renton.*", "Renton", {"city": "Renton.*"}),
         ("Mercer Island School District", "Mercer Island", {"city": "Mercer Island"}),
         ("Lake Washington School District", "Lake Washington", {}),
         ("Issaquah School District", "Issaquah", {"city": "Issaquah"}),
-        ("Bellevue School District", "Bellevue",  {"city": "Bellevue"}),
         ("Northshore School District", "Northshore", {"district": ".*Northshore.*"}),
         ("Seattle.*", "Seattle", {"city": "Seattle.*"}),
     ]:
@@ -161,12 +170,6 @@ def run():
 
         makePlots(dfpub, dfpriv, schoolDetail=True)
 
-    # King county (public only)
-    for county in ["King"]:
-        makePlots(public.select_county(county), private=None, schoolDetail=False)
-
-    # State wide
-    makePlots(public.addPath("State"), private.addPath("State"))
 
 
 
