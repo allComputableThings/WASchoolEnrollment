@@ -1,7 +1,9 @@
+import io
+
 import pandas as pd
 
 import schools_directory
-from dataUtil import publicData, privateData, noOp
+from dataUtil import publicData, privateData, noOp, clean
 from dataUtil import DataSet
 import re
 
@@ -33,6 +35,25 @@ def makePlots(public, private=None, schoolDetail=False, addDir=""):
     # print("Public district names:", sorted(private_district_names))
     # print("Private schools:", sorted(private_school_names))
     # print("Private zips:", sorted(private_schools_zips))
+    if 1:
+        # Save summary:
+        with open("README.template.md", 'r') as fd:
+            template = fd.read()
+
+        cleanRegionString = clean(public.path[-1])
+        template = template.format(region=cleanRegionString)
+        outf = "/".join(['plots'] + [cleanRegionString + ".README.md"])
+        tio = io.StringIO()
+        tio.write(template)
+        tio.write("\n")
+        tio.write("\n# Public Schools \n\n")
+        for s in sorted(public.schools):
+            tio.write(f" - [{s}](Washington_Public/{cleanRegionString}/school_cohorts/{clean(s)}.cohorts.svg)\n")
+        if private is not None:
+            tio.write("\n# Private Schools \n\n")
+            for s in sorted(private.schools):
+                tio.write(f" - [{s}](Washington_Private/{cleanRegionString}/school_cohorts/{clean(s)}.cohorts.svg)\n")
+        with open(outf, 'w') as fd: fd.write(tio.getvalue())
 
     sets = []
     if private is not None:
@@ -71,7 +92,7 @@ def makePlots(public, private=None, schoolDetail=False, addDir=""):
 
     # Cohort for all
     for dfBase in sets:
-        dfBase.plotCohortProgression(post=f"{'/'if addDir else ''}{addDir}/cohorts")
+        dfBase.plotCohortProgression(post=f"{'/'if addDir else ''}{addDir}/cohorts", addVsBaseYear=2019)
 
     # Plot schools
     for ds in sets:
@@ -81,12 +102,14 @@ def makePlots(public, private=None, schoolDetail=False, addDir=""):
     if schoolDetail:
         # Cohort for school
         for ds in sets:
-            for dfBase in [public.select_school(s) for s in ds.schools]:
-                dfBase.plotCohortProgression(addDir=f"{addDir}school_cohorts")
+            print(ds.path)
+            for dfBase in [ds.select_school(s) for s in ds.schools]:
+                # print(dfBase.path)
+                dfBase.plotCohortProgression(addDir=f"{addDir}school_cohorts", outputTable=False)
 
     for ds in sets:
         for name, gradeYears in gradeSets:
-            ds.plotGrades(name, title=name, addDir=addDir)
+            ds.plotGrades(name, title=name, addDir=addDir, outputTable=True)
 
     for ds in sets:
         ds.reportYearlyChangesSinceBaselineYear(2019)
@@ -102,6 +125,8 @@ gradeSets = [
     ("K-12", ['K'] + [str(s) for s in range(1, 13)]),
     ("P-12", ['P', 'K'] + [str(s) for s in range(1, 13)]),
     ("P-5", ['P', 'K'] + [str(s) for s in range(1, 6)]),
+    ("P-3", ['P', 'K'] + [str(s) for s in range(1, 4)]),
+    ("K-3", ['K'] + [str(s) for s in range(1, 4)]),
     ("K-5", ['K'] + [str(s) for s in range(1, 6)]),
 ]
 
@@ -121,6 +146,8 @@ def pub_district2priv_zips(dfpub, district=None):
     zips = set(priv_zips) | set(pub_zips)
     return zips
 
+def df2ReadmeName(dfpub):
+    return "/".join(['plots'] + [clean(dfpub.path[-1])]) + ".README.md"
 
 def run():
 
@@ -137,13 +164,9 @@ def run():
     #     schools_directory.public.select_district(district_name)
     #     private.df.tail(10)
 
-    # King county (public only)
-    for county in ["King"]:
-        makePlots(public.select_county(county), private=None, schoolDetail=False)
 
-    # State wide
-    makePlots(public.addPath("State"), private.addPath("State"))
 
+    directory = []
 
     for school_district, title, private_rule in [
         ("Bellevue School District", "Bellevue",  {"city": "Bellevue"}),
@@ -156,7 +179,10 @@ def run():
         ("Northshore School District", "Northshore", {"district": ".*Northshore.*"}),
         ("Seattle.*", "Seattle", {"city": "Seattle.*"}),
     ]:
+
         dfpub = public.select_region(school_district, title=title)
+        directory.append((title, df2ReadmeName(dfpub)))
+
         if private_rule:
             if 'city' in private_rule:
                 dfpriv = private.select_city(private_rule['city'])
@@ -170,7 +196,23 @@ def run():
 
         makePlots(dfpub, dfpriv, schoolDetail=True)
 
+    # King county (public only)
+    for county in ["King"]:
+        dfpub = public.select_county(county)
+        makePlots(dfpub, private=None, schoolDetail=False)
+        directory.append((county, df2ReadmeName(dfpub)))
 
+    # State wide
+    dfpub = public.addPath("State")
+    makePlots(dfpub, private.addPath("State"))
+    directory.append(("State", df2ReadmeName(dfpub)))
+
+    with open("plots/directory.md", 'w') as fd:
+        text = ""
+        for title, readme in directory:
+            readme = readme[len("plots/"):]
+            text = text + f"\n - [{title}]({readme})\n"
+        fd.write(text)
 
 
 

@@ -2,6 +2,7 @@ import dataclasses
 import os
 import time
 from functools import cached_property
+from typing import Callable, Dict
 
 import matplotlib
 import pandas as pd
@@ -122,16 +123,23 @@ def deltaPercent(old, new):
     return 100 * ((new / old) - 1)
 
 
-def addDeltas(df, totalName="Total"):
+def addDeltas(df, totalName="Total", addVsBaseYear=None):
     dOld = df[totalName].values[:-1]
     dNew = df[totalName].values[1:]
     delta = (dNew - dOld)
     dTot = np.concatenate([np.zeros(1, dtype=delta.dtype), delta])
     dPercent = np.concatenate([np.zeros(1, dtype=delta.dtype), deltaPercent(dOld, dNew)])
     df = df.assign(**{'ΔTotal': dTot.astype(str),
-                      'Δ%': [f"{x:3.1f}%" for x in dPercent]})
+                      'Δ%': [f"{x:+3.1f}%" for x in dPercent]})
     df.iloc[0, df.columns.get_loc("ΔTotal")] = ""
     df.iloc[0, df.columns.get_loc("Δ%")] = ""
+
+    if addVsBaseYear:
+        tots = df["Total"]
+        _baseTotal = int(tots[addVsBaseYear])
+        df[f"Δ{addVsBaseYear}"] = tots - _baseTotal
+        df[f"Δ% since {addVsBaseYear}"] = ((100 * tots / _baseTotal) - 100).map(lambda s: f"{s:+3.1f}" + "%")
+
     return df
 
 
@@ -298,8 +306,10 @@ class DataSet(Updateable):
             region = re.compile(region)
 
         if not isinstance(region, str):
+            assert isinstance(region, re.Pattern)
             df = self.df[self.df[DISTRICT_NAME].astype(str).str.match(region)]
         else:
+            assert isinstance(region, str)
             df = self.df[self.df[DISTRICT_NAME].astype(str).str.lower().str.contains(region.lower())]
 
         names = df[DISTRICT_NAME].unique()
@@ -308,6 +318,14 @@ class DataSet(Updateable):
         if len(df)==0:
             raise Exception(f"Empty region: {region}")
         selection = title or (names[0] if len(names) == 1 else region)
+        # print(df.summary())
+        # print(sorted(df["Grade"].unique()))
+        # print(sorted(df[df["Year"]==2024]["Grade"].unique()))
+        # print(df[(df["Year"]==2023) & (df["Grade"]=='1')]["Total"].sum())
+        # print(df[(df["Year"]==2023) ]["Total"].sum())
+        # self.df[self.df["ESDName"].apply(lambda s:not isinstance(s, str))]
+        # sorted(self.df["ESDName"].unique())
+
         return self.update(
             df=df,
             # selection=selection,
@@ -590,83 +608,7 @@ class DataSet(Updateable):
 
 
     @timed
-    def plotCohortProgression(self, addDir="", post=""):
-        def plotGradeProgression(df):
-            grades = ['K'] + [str(i) for i in range(1, 13)]
-
-            def gen(df):
-
-                _df = df[[g for g in grades if g in df.columns]]
-                yeari = 0
-
-                if _df.shape[0] == 0: return
-                if _df.shape[1] == 1: return
-
-                gradeStart = index2year[min([yearSortMap[i] for i in _df.columns])]
-
-                gradeStartI = grades.index(gradeStart)
-
-                while True:
-                    year_ = []
-                    total_ = []
-                    try:
-                        year1 = _df.index[yeari]
-                    except IndexError:
-                        break
-
-                    i = 0
-                    while True:
-                        try:
-                            year = year1 + i
-                            g = grades[i + gradeStartI]
-                            tot = _df.loc[year][g]
-                            total_.append(tot)
-                            year_.append(year)
-                        except IndexError:
-                            break
-                        except KeyError:
-                            break
-                        i += 1
-                    s = pd.Series(index=year_, data=total_, name=str(_df.index[yeari]))
-                    s = s[s != 0]
-                    yield f"Grade {gradeStart} of {year1}", s
-                    yeari += 1
-
-            _grade2PlotParam = dict(nameYears)
-            f, ax = plt.subplots(1, figsize=(8, 6))
-            # defaultFigSize(f, width=10)
-
-            try:
-                datas = list(gen(df))
-                ymax = max([d.max() for year1, d in datas if not math.isnan(d.max())])
-            except ValueError:
-                print(f"plotCohortProgression: Empty data: {self.path}")
-                return
-
-            for name, data in datas:
-                #         print(name)
-                ax.plot(data.index, data.values, label=name, marker='.', )
-                # ax.set_ylim(ymin=0, ymax=1.15 * ymax)
-                # ax.set_xlim(xmax=2028.5)
-            # fixAxis()
-
-            # ax.legend(loc='lower right')
-            #     display(s.to_frame().plot())
-            # plt.ylabel(ylabel)
-            # plt.ylabel("Cohort Enrollment")
-            # plt.title(title)
-
-            plt.ylim(ymin=0)
-            plt.title(title)
-            plt.ylabel("Cohort Enrollment")
-            # plt.ylabel("Enrollment")
-            plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))  # loc='lower right')
-            plt.tight_layout()
-            # do_plot()
-
-            pltShow()
-            # path = clean("_".join(self.path))
-            saveSVGFig(f, self.filename(addDir=addDir, post=post )+f".cohorts.svg")
+    def plotCohortProgression(self, addDir="", post="", addVsBaseYear=None, outputTable=True):
 
         if len(self.df)==0:
             print("plotCohortProgression empty:", self.path)
@@ -674,25 +616,119 @@ class DataSet(Updateable):
 
         # if dfName is None:
         #     dfName = ",".join(self.path)
-        title = ", ".join(self.path)
         # filenameBase = "/".join(t.replace(', ', '_').replace(' ', '_') in self.path)
         # filename = "/".join(self.path[-1])
 
-        yearSortMap = {str(i): i for i in range(1, 13)} | {i: i for i in range(1, 13)} | {"P": -1, "K": 0}
-        index2year = {v: str(k) for k, v in yearSortMap.items()}
-
-        def yearSort(g):
-            # print("**", g.name)
-            # if g.name!='Grade': return g
-            with pd.option_context("future.no_silent_downcasting", True):
-                r = g.replace(yearSortMap).infer_objects(copy=False)
-                return r
 
         # for df in
         # print(dfName, ">" * 20)
-        df = self.df
-        df = df[["Grade", "Year", "Total"]].copy()
-        totals = df.groupby(["Year", "Grade"])["Total"].sum().to_frame()
+        if outputTable:
+            self.saveGradeYearTableWithTotals(
+                self.df, #self.asGradeYearTotal,
+                year_sort=self.year_sort,
+                filename=self.filename(addDir=addDir, post=post) + f".cohorts_table.svg",
+                addVsBaseYear=addVsBaseYear)
+
+        # params = (
+        #     # 'display.height', 100000,
+        #     'display.width', 100000,
+        #     'display.max_rows', 100000,
+        #     'display.max_columns', 100000)
+        # with pd.option_context(*params):
+        self._plotGradeProgression(self.asGradeYearTotal,
+                                   yearSort=self.year_sort,
+                                   path=self.path,
+                                   filename=self.filename(addDir=addDir, post=post )+f".cohorts.svg")  # , ylabel=f"{dfName} Grade Enrollment Progression")
+
+        print(self.path, "<" * 20)
+        matplotlib.pyplot.close()
+
+    @staticmethod
+    def _plotGradeProgression(df, yearSort, path, filename):
+        title = ", ".join(path)
+
+        # yearSort = self.year_sort
+        grades = ['K'] + [str(i) for i in range(1, 13)]
+
+        def gen(df):
+
+            _df = df[[g for g in grades if g in df.columns]]
+            yeari = 0
+
+            if _df.shape[0] == 0: return
+            if _df.shape[1] == 1: return
+
+            gradeStart = yearSort.index2year[min([yearSort.yearSortMap[i] for i in _df.columns])]
+
+            gradeStartI = grades.index(gradeStart)
+
+            while True:
+                year_ = []
+                total_ = []
+                try:
+                    year1 = _df.index[yeari]
+                except IndexError:
+                    break
+
+                i = 0
+                while True:
+                    try:
+                        year = year1 + i
+                        g = grades[i + gradeStartI]
+                        tot = _df.loc[year][g]
+                        total_.append(tot)
+                        year_.append(year)
+                    except IndexError:
+                        break
+                    except KeyError:
+                        break
+                    i += 1
+                s = pd.Series(index=year_, data=total_, name=str(_df.index[yeari]))
+                s = s[s != 0]
+                yield f"Grade {gradeStart} of {year1}", s
+                yeari += 1
+
+        _grade2PlotParam = dict(nameYears)
+        f, ax = plt.subplots(1, figsize=(8, 6))
+        # defaultFigSize(f, width=10)
+
+        try:
+            datas = list(gen(df))
+            ymax = max([d.max() for year1, d in datas if not math.isnan(d.max())])
+        except ValueError:
+            print(f"plotCohortProgression: Empty data: {path}")
+            return
+
+        for name, data in datas:
+            #         print(name)
+            ax.plot(data.index, data.values, label=name, marker='.', )
+            # ax.set_ylim(ymin=0, ymax=1.15 * ymax)
+            # ax.set_xlim(xmax=2028.5)
+        # fixAxis()
+
+        # ax.legend(loc='lower right')
+        #     display(s.to_frame().plot())
+        # plt.ylabel(ylabel)
+        # plt.ylabel("Cohort Enrollment")
+        # plt.title(title)
+
+        plt.ylim(ymin=0)
+        plt.title(title)
+        plt.ylabel("Cohort Enrollment")
+        # plt.ylabel("Enrollment")
+        plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))  # loc='lower right')
+        plt.tight_layout()
+        # do_plot()
+
+        pltShow()
+        # path = clean("_".join(self.path))
+        saveSVGFig(f, filename)
+
+    @staticmethod
+    def saveGradeYearTableWithTotals(df, filename, year_sort, addVsBaseYear=None):
+        # df = self.df
+        # df = df[["Grade", "Year", "Total"]].copy()
+        # totals = df.groupby(["Year", "Grade"])["Total"].sum().to_frame()
 
         params = (
             # 'display.height', 100000,
@@ -700,29 +736,74 @@ class DataSet(Updateable):
             'display.max_rows', 100000,
             'display.max_columns', 100000)
         with pd.option_context(*params):
-            df = totals.reset_index().sort_values(["Grade", "Year"]).set_index("Year").pivot(
-                columns=["Grade"]).fillna(0).astype(int).sort_values(by="Grade", axis=1, key=yearSort)
-            df = df["Total"]
-            plotGradeProgression(df)  # , ylabel=f"{dfName} Grade Enrollment Progression")
+            # df = totals.reset_index().sort_values(["Grade", "Year"]).set_index("Year").pivot(
+            #     columns=["Grade"]).fillna(0).astype(int).sort_values(by="Grade", axis=1, key=self.year_sort.sort)
+            # df = df["Total"]
+            # plotGradeProgression(df)  # , ylabel=f"{dfName} Grade Enrollment Progression")
             #       df["Total"] = df.sum(axis=1)
-            d = df.assign(Total=df.sum(axis=1))
-            d = addDeltas(d)
-            cols = list(d.columns)
-            #       d = d.assign(Year=d.index.values) #["Year"+cols]
-
-            display(d)
-
-            df2SVGFile(d.reset_index()[["Year"] + cols],
-                       # self.filename(post="_cohorts_table.svg", addDir="schoolCohorts")
-                       self.filename(addDir=addDir, post=post)+f".cohorts_table.svg"
-                       )
+            _df = df
+            df = _df
 
 
-        print(self.path, "<" * 20)
-        matplotlib.pyplot.close()
+            df = df[["Grade", "Year", "Total"]].copy()
+            totals = df.groupby(["Year", "Grade"])["Total"].sum().to_frame()
+            params = (
+                # 'display.height', 100000,
+                'display.width', 100000,
+                'display.max_rows', 100000,
+                'display.max_columns', 100000)
+            with pd.option_context(*params):
+                df = totals.reset_index().sort_values(["Grade", "Year"]).set_index("Year").pivot(
+                    columns=["Grade"]).fillna(0).astype(int).sort_values(by="Grade", axis=1, key=year_sort.sort)
+                df = df["Total"]
+                # plotGradeProgression(df)  # , ylabel=f"{dfName} Grade Enrollment Progression")
+                #       df["Total"] = df.sum(axis=1)
+                d = df.assign(Total=df.sum(axis=1))
+                d = addDeltas(d, addVsBaseYear=addVsBaseYear)
+
+
+            # d = addDeltas(d)
+
+
+                cols = list(d.columns)
+                #       d = d.assign(Year=d.index.values) #["Year"+cols]
+
+                display(d)
+
+                df2SVGFile(d.reset_index()[["Year"] + cols],
+                           # self.filename(post="_cohorts_table.svg", addDir="schoolCohorts")
+                           filename
+                           )
+
+    @cached_property
+    def asGradeYearTotal(self):
+            df = self.df[["Grade", "Year", "Total"]].copy()
+            totals = df.groupby(["Year", "Grade"])["Total"].sum().to_frame()
+            df = totals.reset_index().sort_values(["Grade", "Year"]).set_index("Year").pivot(
+                columns=["Grade"]).fillna(0).astype(int).sort_values(by="Grade", axis=1, key=self.year_sort.sort)
+            df = df["Total"]
+            return df
+
+    @cached_property
+    def year_sort(self):
+        yearSortMap = {str(i): i for i in range(1, 13)} | {i: i for i in range(1, 13)} | {"P": -1, "K": 0}
+        index2year = {v: str(k) for k, v in yearSortMap.items()}
+        def yearSort(g):
+            # print("**", g.name)
+            # if g.name!='Grade': return g
+            with pd.option_context("future.no_silent_downcasting", True):
+                r = g.replace(yearSortMap).infer_objects(copy=False)
+                return r
+
+        @dataclasses.dataclass
+        class YearSort:
+            sort:Callable
+            index2year:Dict
+            yearSortMap:Dict
+        return YearSort(yearSort, index2year, yearSortMap)
 
     @timed
-    def plotGrades(self, grades=None, title=None, addDir=""):
+    def plotGrades(self, grades=None, title=None, addDir="", outputTable=False):
         df = self.df
 
         def lastYearTotal(s):
@@ -730,8 +811,11 @@ class DataSet(Updateable):
             yearMax = _df["Year"].max()
             return -(_df[_df["Year"] == yearMax]["Total"].sum())
 
+        foundGrades = []
         def plotGrade(df, gradeName):
             data = df[df["Grade"] == gradeName].groupby("Year")["Total"].sum()
+            if len(data)>0:
+                foundGrades.append(gradeName)
             ax.plot(data.index.astype(int), data.values,
                     label=gradeName,
                     marker='.', )
@@ -762,8 +846,16 @@ class DataSet(Updateable):
         # defaultFigSize(f)
         pltShow()
 
-        saveSVGFig(f, "/".join([self.filename()+f'/{addDir}grade_group_enrollment_trends', clean(f"{title}_gradeGroup.svg")]))
+        filename = "/".join([self.filename()+f'/{addDir}grade_group_enrollment_trends', clean(f"{title}_gradeGroup.svg")])
+        saveSVGFig(f, filename)
         matplotlib.pyplot.close()
+
+        if outputTable:
+            df = self.df
+            df = df[df["Grade"].isin(set(foundGrades))]
+            self.saveGradeYearTableWithTotals(df,
+                                              year_sort=self.year_sort,
+                                              filename=filename[:-4]+".table.svg", addVsBaseYear=2019)
 
 
 def defaultFigSize(f, width=8):
