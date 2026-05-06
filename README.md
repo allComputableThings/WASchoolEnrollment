@@ -34,8 +34,6 @@ Several kinds of plots are available:
 
 ### Directory
 
-```{include} plots/directory.md 
-```
 [Directory](plots/directory.md)
 
 
