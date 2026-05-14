@@ -37,7 +37,7 @@ def makePlots(public, private=None, schoolDetail=False, addDir=""):
     # print("Private zips:", sorted(private_schools_zips))
     if 1:
         # Save summary:
-        with open("README.template.md", 'r') as fd:
+        with open("directory.template.md", 'r') as fd:
             template = fd.read()
 
         cleanRegionString = clean(public.path[-1])

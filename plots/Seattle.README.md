@@ -1,6 +1,9 @@
 ![](Washington_Public/Seattle/cohorts.cohorts.svg)
+![](Washington_Public/Seattle/cohorts.cohorts_table.svg)
 
 ![](Washington_Private/Seattle/cohorts.cohorts.svg)
+![](Washington_Private/Seattle/cohorts.cohorts_table.svg)
+
 
 ![](Washington_Public/Seattle/enrollment.gradeTier.svg)
 ![](Washington_Private/Seattle/enrollment.gradeTier.svg)

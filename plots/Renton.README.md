@@ -1,6 +1,9 @@
 ![](Washington_Public/Renton/cohorts.cohorts.svg)
+![](Washington_Public/Renton/cohorts.cohorts_table.svg)
 
 ![](Washington_Private/Renton/cohorts.cohorts.svg)
+![](Washington_Private/Renton/cohorts.cohorts_table.svg)
+
 
 ![](Washington_Public/Renton/enrollment.gradeTier.svg)
 ![](Washington_Private/Renton/enrollment.gradeTier.svg)

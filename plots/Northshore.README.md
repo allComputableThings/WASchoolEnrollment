@@ -1,6 +1,9 @@
 ![](Washington_Public/Northshore/cohorts.cohorts.svg)
+![](Washington_Public/Northshore/cohorts.cohorts_table.svg)
 
 ![](Washington_Private/Northshore/cohorts.cohorts.svg)
+![](Washington_Private/Northshore/cohorts.cohorts_table.svg)
+
 
 ![](Washington_Public/Northshore/enrollment.gradeTier.svg)
 ![](Washington_Private/Northshore/enrollment.gradeTier.svg)

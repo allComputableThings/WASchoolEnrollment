@@ -1,6 +1,9 @@
 ![](Washington_Public/Snoqualmie_Valley/cohorts.cohorts.svg)
+![](Washington_Public/Snoqualmie_Valley/cohorts.cohorts_table.svg)
 
 ![](Washington_Private/Snoqualmie_Valley/cohorts.cohorts.svg)
+![](Washington_Private/Snoqualmie_Valley/cohorts.cohorts_table.svg)
+
 
 ![](Washington_Public/Snoqualmie_Valley/enrollment.gradeTier.svg)
 ![](Washington_Private/Snoqualmie_Valley/enrollment.gradeTier.svg)

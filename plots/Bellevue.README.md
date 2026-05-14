@@ -1,6 +1,9 @@
 ![](Washington_Public/Bellevue/cohorts.cohorts.svg)
+![](Washington_Public/Bellevue/cohorts.cohorts_table.svg)
 
 ![](Washington_Private/Bellevue/cohorts.cohorts.svg)
+![](Washington_Private/Bellevue/cohorts.cohorts_table.svg)
+
 
 ![](Washington_Public/Bellevue/enrollment.gradeTier.svg)
 ![](Washington_Private/Bellevue/enrollment.gradeTier.svg)

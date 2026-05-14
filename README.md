@@ -1,10 +1,10 @@
 # Washington School Enrollment Data
 
-This project processes data from the OSPI Data Portal and SBE Data Portal to summarize changes in Washington school
-enrollment from state data (OPSI for public schoole and Washington State Board of Education for private schools).
+This project processes and summarize data from Washington school
+enrollment data. Public school data is via OPSI. Private school data is via Washington State Board of Education.
 It should be noted that the private school data reported to SBE is voluntary reporting and likely under-estimates private
-school enrollment, and that reporting may be inconsistent from year to year with both *over* and under-estimation 
-of public school growth being possible consequences.
+school enrollment, and that reporting may be inconsistent from year to year with both over or under-estimation of growth
+is a possible consequences.
 
 Generated plots are available in the `plots` directories:
 
@@ -18,7 +18,7 @@ Several kinds of plots are available:
 * Cohort progression plots. These track enrollment over time for a grade as it ages and progress. Of particular interest to
   future enrollment are trends following a grade from Kindergarten. We see:
   - recession in Kindergarten enrollment (the start of each trace) appears to have bottomed and is turning around.
-  - grades generally grow year-on-year. Because few births go on to initially enter the public system *after* Kindergarten, we should infer that
+  - grades groups generally grow year-on-year as the age (up-and-to-the-right trend). Because few births go on to initially enter the public system *after* Kindergarten, we should infer that
     growth in the size of a grade as it ages is due one of the following causes: inward migration (foreign or domestic) 
     into the state and its cities, and/or movement between public and homeschool and private.
     These trends indicate that it is dangerous to rely primarily on state birthrates when
@@ -39,15 +39,15 @@ Several kinds of plots are available:
 
 # Washington Summary
 
+State public school cohort trends - cohort growth, even as kindergarden declines:State public school cohort trends:
 ![Public Cohort Progression](plots/Washington_Public/State/cohorts.cohorts.svg)
-*State public school cohort trends*
 
+Private school cohort decline:
 ![Private Cohort Progression](plots/Washington_Private/State/cohorts.cohorts.svg)
-*State private school cohort trends*
+
 
 
 ![Cohort](plots/Washington_Public/State/enrollment.gradeTier.svg)
-*State public school cohort trends - cohort growth, even as kindergarden declines.*
 
 ![Cohort](plots/Washington_Private/State/enrollment.gradeTier.svg)
 *State private school cohort trends - in decline*
@@ -58,9 +58,11 @@ Several kinds of plots are available:
 **Caution on interpretation of private school trends** 
 
 It is unclear whether some years had more private school reporting than others, which might significantly affect the
-interpretation of private school trends. However, independent estimation of the number of children in a city can be obtained from county demographers.
+interpretation of private school trends. For example, under-reporting in 2019, could result is a mis-interpretation of
+growth in 2020 even if no growth occurred. However, independent estimation of the number of children in a city can be
+obtained from county demographers.
 At least for Bellevue, we saw roughly a net-zero growth in the city's population of school aged children via
-county demographer models in the same period  a (roughly) net-zero public/private transfer of students during
+county demographer models in the same period a (roughly) net-zero public/private transfer of students during
 and following COVID.
 
 ## Bellevue 
@@ -68,26 +70,29 @@ and following COVID.
 Although Bellevue public school enrollment is briefly in decline, it is instructive to know where the loss
 is coming from.
 
-The Bellevue school district has argued:
+The Bellevue school district (and its demographer) has argued:
 
-* declining birth rates
-* families selling homes and exiting the district, are replaced by childless families
-* high costs of living (ignoring that families in all income brackets have children)
-* new housing unattractive to parents (but are unable to say how it knows whether these new families are really childless, or just not enrolled in the the district).
+* Declining birth rates
+* Families selling homes and exiting the district. This is supported by record-transfer requests.
+* It is assumed (unsupported?) that exiting families are replaced by more childless families.
+* High costs of living (ignoring that families in all income brackets have children)
 
 The administration has ignored:
 
-* parent dissatisfaction in the public school district, particular over COVID school closures
-* the boom in personal finances during COVID that made private school more affordable to homeowners able to refinance to low monthly payments and take equity out of their home.
+* A lack of surveillance on incoming families who go direct to private school and have no records transfer requests.
+* Parent dissatisfaction in the public school district, particular over COVID school closures
+* The boom in personal finances during COVID that made private school more affordable to homeowners able to refinance to low monthly payments and take equity out of their home.
 * Bellevue's population is composed heavily of migrant workers, and worker migration is largely unmodeled.
-* That the extremely expensive housing market is a consequences of quality schools, which is a negative value to childless families.
+* A boom in dense and low income housing construction, and luxury single family home construction.
+* The extremely expensive housing market is a consequence of quality schools, which is a negative value to childless
+  families.
 * A steady or rising (not falling) population of children in the city, according to county demographers.
 
 We can see clearly in the local private school data that public school losses were principally to local
 private schools.
 
 
-The sum of public+private elementary enrollment doesn't appear in decline:
+The sum of public+private elementary enrollment doesn't appear to be in decline:
 
 ![Bellevue_Elementary](plots/Washington_Private/Bellevue/vs_public/Washington_Public_Bellevue_Elementary_vs_Washington_Private_Bellevue_Elementary.svg)
 
@@ -149,7 +154,7 @@ Seattle private school enrollment appears stalled:
 
 ![](plots/Washington_Private/Seattle/enrollment.gradeTier.svg)
 
-The sum of public+private enrollment has held steady (no in decline). Seattle public schools appear to have lost
+The sum of public+private enrollment has held steady (not in decline). Seattle public schools appear to have lost
 enrollment to private schools:
 
 ![](plots/Washington_Private/Seattle/vs_public/Washington_Public_Seattle_vs_Washington_Private_Seattle.svg)

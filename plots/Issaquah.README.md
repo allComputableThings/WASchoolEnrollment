@@ -1,6 +1,9 @@
 ![](Washington_Public/Issaquah/cohorts.cohorts.svg)
+![](Washington_Public/Issaquah/cohorts.cohorts_table.svg)
 
 ![](Washington_Private/Issaquah/cohorts.cohorts.svg)
+![](Washington_Private/Issaquah/cohorts.cohorts_table.svg)
+
 
 ![](Washington_Public/Issaquah/enrollment.gradeTier.svg)
 ![](Washington_Private/Issaquah/enrollment.gradeTier.svg)

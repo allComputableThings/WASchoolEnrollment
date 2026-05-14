@@ -1,6 +1,9 @@
 ![](Washington_Public/King/cohorts.cohorts.svg)
+![](Washington_Public/King/cohorts.cohorts_table.svg)
 
 ![](Washington_Private/King/cohorts.cohorts.svg)
+![](Washington_Private/King/cohorts.cohorts_table.svg)
+
 
 ![](Washington_Public/King/enrollment.gradeTier.svg)
 ![](Washington_Private/King/enrollment.gradeTier.svg)

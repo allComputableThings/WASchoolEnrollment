@@ -1,6 +1,9 @@
 ![](Washington_Public/Mercer_Island/cohorts.cohorts.svg)
+![](Washington_Public/Mercer_Island/cohorts.cohorts_table.svg)
 
 ![](Washington_Private/Mercer_Island/cohorts.cohorts.svg)
+![](Washington_Private/Mercer_Island/cohorts.cohorts_table.svg)
+
 
 ![](Washington_Public/Mercer_Island/enrollment.gradeTier.svg)
 ![](Washington_Private/Mercer_Island/enrollment.gradeTier.svg)

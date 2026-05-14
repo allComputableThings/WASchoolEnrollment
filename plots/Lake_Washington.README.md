@@ -1,6 +1,9 @@
 ![](Washington_Public/Lake_Washington/cohorts.cohorts.svg)
+![](Washington_Public/Lake_Washington/cohorts.cohorts_table.svg)
 
 ![](Washington_Private/Lake_Washington/cohorts.cohorts.svg)
+![](Washington_Private/Lake_Washington/cohorts.cohorts_table.svg)
+
 
 ![](Washington_Public/Lake_Washington/enrollment.gradeTier.svg)
 ![](Washington_Private/Lake_Washington/enrollment.gradeTier.svg)
