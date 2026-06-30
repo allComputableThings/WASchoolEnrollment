@@ -1,0 +1,262 @@
+File: childcare_providers/DCYF_Licensed_Childcare_Center_and_School_Age_Program_Providers.csv
+Rows: 2527
+Columns: 34
+
+Column: WacompassId
+  dtype: object
+  non_null: 2527
+  null: 0
+  unique_non_null: 2526
+  sample_values: 001t0000007qJB0AAM, 001t000000KyMGfAAN, 001t0000007qEpgAAE, 001t0000007qASoAAM, 001t0000007qDgAAAU
+
+Column: FamLinkId
+  dtype: int64
+  non_null: 2527
+  null: 0
+  unique_non_null: 2526
+  sample_values: 885224, 1658222, 218294, 83700, 175139
+  min: 2638
+  max: 2972181
+  mean: 1095087.6561139692
+
+Column: SSPSProviderNumber
+  dtype: float64
+  non_null: 2526
+  null: 1
+  unique_non_null: 2518
+  sample_values: 760907.0, 314769.0, 955125.0, 832338.0, 791638.0
+  min: 96.0
+  max: 999875.0
+  mean: 467207.9833729216
+
+Column: ProviderName
+  dtype: object
+  non_null: 2527
+  null: 0
+  unique_non_null: 2519
+  sample_values: ENCOMPASS ECEAP, KELLER CHILD CARE, FAIRCHILD AFB YOUTH CENTER, HORIZON SCHOOL, YMCA - HAWTHORNE
+
+Column: DoingBusinessAs
+  dtype: object
+  non_null: 2527
+  null: 0
+  unique_non_null: 2259
+  sample_values: ENCOMPASS ECEAP, KELLER CHILD CARE, FAIRCHILD AFB YOUTH CENTER, CHILDCARE CENTER, YMCA - HAWTHORNE
+
+Column: FacilityTypeGeneric
+  dtype: object
+  non_null: 2527
+  null: 0
+  unique_non_null: 3
+  sample_values: CHILD CARE CENTER, SCHOOL-AGE PROGRAM, OUTDOOR NATURE BASED PROGRAM
+
+Column: FacilityTypeAuthorityDesc
+  dtype: object
+  non_null: 2527
+  null: 0
+  unique_non_null: 1
+  sample_values: DEL Licensed
+
+Column: LatestOperatingStatus
+  dtype: object
+  non_null: 2527
+  null: 0
+  unique_non_null: 2
+  sample_values: Active, Not Active
+
+Column: LicenseCertificateTypeDesc
+  dtype: object
+  non_null: 2527
+  null: 0
+  unique_non_null: 3
+  sample_values: LICENSED, PAYMENT ONLY, CERTIFIED
+
+Column: InitialLicenseDate
+  dtype: object
+  non_null: 2527
+  null: 0
+  unique_non_null: 1904
+  sample_values: 2015-04-01, 2019-12-12, 2009-08-14, 1993-09-08, 1996-01-15
+
+Column: LatestLicenseStartDate
+  dtype: object
+  non_null: 2527
+  null: 0
+  unique_non_null: 1566
+  sample_values: 2017-03-27, 2019-12-12, 2016-12-02, 2014-09-08, 2017-01-15
+
+Column: LicenseExpirationDate
+  dtype: object
+  non_null: 100
+  null: 2427
+  unique_non_null: 76
+  sample_values: 2026-05-08, 2026-11-21, 2026-06-21, 2026-10-05, 2026-09-03
+
+Column: LicenseCapacity
+  dtype: int64
+  non_null: 2527
+  null: 0
+  unique_non_null: 217
+  sample_values: 56, 30, 160, 46, 45
+  min: 6
+  max: 354
+  mean: 70.08389394538979
+
+Column: StartingAge
+  dtype: object
+  non_null: 2527
+  null: 0
+  unique_non_null: 25
+  sample_values: 2 years 5 months, birth, 5 years 0 months, 3 years 0 months, 2 years 6 months
+
+Column: EndingAge
+  dtype: object
+  non_null: 2527
+  null: 0
+  unique_non_null: 36
+  sample_values: 6 years 0 months, 5 years 0 months, 12 years 0 months, 10 years 0 months, 13 years 0 months
+
+Column: PrimaryContactPersonName
+  dtype: object
+  non_null: 2520
+  null: 7
+  unique_non_null: 1658
+  sample_values: LISA HART, JEANIE KENT, JENNIFER FOLAND, PADMA PRASAD, JORDAN ENGEL
+
+Column: PrimaryContactPhoneNumber
+  dtype: object
+  non_null: 263
+  null: 2264
+  unique_non_null: 29
+  sample_values: 2533296223, 5095883225, 3608705067, 5097660058, 5099983602
+
+Column: PrimaryContactEmail
+  dtype: object
+  non_null: 2518
+  null: 9
+  unique_non_null: 1657
+  sample_values: lisa.hart@encompassnw.org, jeanie.kent@colvilletribes.com, jennifer.foland@us.af.mil, pprasad@thehorizonschool.net, enge3782@vandals.uidaho.edu
+
+Column: PhyscialLatitude
+  dtype: float64
+  non_null: 2527
+  null: 0
+  unique_non_null: 1714
+  sample_values: 47.5055, 48.0985, 47.636, 47.771, 46.2177
+  min: 0.0
+  max: 48.9866
+  mean: 35.04629635931935
+
+Column: PhysicalLongitude
+  dtype: float64
+  non_null: 2527
+  null: 0
+  unique_non_null: 1669
+  sample_values: -121.7961, -118.693, -117.6505, -122.3778, -119.1668
+  min: -124.6352
+  max: 0.0
+  mean: -89.95098508112386
+
+Column: GeoCodedPhysicalAddress
+  dtype: object
+  non_null: 2527
+  null: 0
+  unique_non_null: 1843
+  sample_values: (47.5055, -121.7961), (48.0985, -118.6930), (47.6360, -117.6505), (47.7710, -122.3778), (46.2177, -119.1668)
+
+Column: PhysicalStreetAddress
+  dtype: object
+  non_null: 2527
+  null: 0
+  unique_non_null: 2501
+  sample_values: 1407 BOALCH AVE NW, 4 JIM JAMES RD, 201 EAST FAIRCHILD HWY., 1512 NW 195TH ST, 3520 W JOHN DAY AVENUE
+
+Column: PhysicalCity
+  dtype: object
+  non_null: 2526
+  null: 1
+  unique_non_null: 251
+  sample_values: NORTH BEND, KELLER, FAIRCHILD AFB, SHORELINE, KENNEWICK
+
+Column: PhysicalState
+  dtype: object
+  non_null: 2521
+  null: 6
+  unique_non_null: 1
+  sample_values: WA
+
+Column: PhysicalZip
+  dtype: int64
+  non_null: 2527
+  null: 0
+  unique_non_null: 344
+  sample_values: 98045, 99140, 99011, 98177, 99336
+  min: 98001
+  max: 99403
+  mean: 98416.6015037594
+
+Column: PhysicalCounty
+  dtype: object
+  non_null: 2527
+  null: 0
+  unique_non_null: 38
+  sample_values: KING, FERRY, SPOKANE, BENTON, THURSTON
+
+Column: PrimaryLicensor
+  dtype: object
+  non_null: 2527
+  null: 0
+  unique_non_null: 99
+  sample_values: CAROL ARTZ, MINDY FLETT, MARY AYERS, PRINCESS YALUNG, OPEN LICENSOR TRI-CITIES
+
+Column: ProviderShippingAddress
+  dtype: object
+  non_null: 2524
+  null: 3
+  unique_non_null: 1853
+  sample_values: 9050 384TH AVENUE SE, PO BOX 452, 92 FSS/FSFC 7 WEST ARNOLD STREET, 1512 NW 195TH STREET, 1234 COLUMBIA PARK TRAIL
+
+Column: ProviderShippingCity
+  dtype: object
+  non_null: 2524
+  null: 3
+  unique_non_null: 238
+  sample_values: SNOQUALMIE, KELLER, FAIRCHILD AFB, SHORELINE, RICHLAND
+
+Column: ShippingZip
+  dtype: float64
+  non_null: 2524
+  null: 3
+  unique_non_null: 347
+  sample_values: 98065.0, 99140.0, 99011.0, 98177.0, 99352.0
+  min: 9820.0
+  max: 99403.0
+  mean: 95641.46988906497
+
+Column: ProviderShippingState
+  dtype: object
+  non_null: 2522
+  null: 5
+  unique_non_null: 14
+  sample_values: WA, IL, OR, AZ, Wa
+
+Column: Region
+  dtype: object
+  non_null: 2527
+  null: 0
+  unique_non_null: 6
+  sample_values: Region 4, Region 1, Region 2, Region 6, Region 3
+
+Column: EaParticipation
+  dtype: object
+  non_null: 2527
+  null: 0
+  unique_non_null: 2
+  sample_values: Enrolled, Not Enrolled
+
+Column: EaRating
+  dtype: object
+  non_null: 986
+  null: 1541
+  unique_non_null: 5
+  sample_values: 4, 3, 3+, 5, 2

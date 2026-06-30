@@ -1,0 +1,340 @@
+File: OSPI_publicschools/Report_Card_Enrollment_2025-26_School_Year_-_Preliminary_20260122.csv
+Rows: 21269
+Columns: 46
+
+Column: SchoolYear
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 1
+  sample_values: 2025-26
+
+Column: OrganizationLevel
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 4
+  sample_values: District, School, County, State
+
+Column: County
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 40
+  sample_values: Chelan, Clallam, Clark, Grays Harbor, Island
+
+Column: ESDName
+  dtype: object
+  non_null: 20299
+  null: 970
+  unique_non_null: 12
+  sample_values: North Central Educational Service District 171, Washington State Charter School Commission, Olympic Educational Service District 114, Educational Service District 112, Capital Region ESD 113
+
+Column: ESDOrganizationID
+  dtype: float64
+  non_null: 20282
+  null: 987
+  unique_non_null: 11
+  sample_values: 100008.0, 105798.0, 100005.0, 100003.0, 100004.0
+  min: 100001.0
+  max: 105886.0
+  mean: 100068.04910758308
+
+Column: DistrictCode
+  dtype: float64
+  non_null: 20620
+  null: 649
+  unique_non_null: 328
+  sample_values: 4127.0, 4129.0, 4222.0, 4228.0, 4246.0
+  min: 1109.0
+  max: 39801.0
+  mean: 22184.255140640154
+
+Column: DistrictName
+  dtype: object
+  non_null: 20637
+  null: 632
+  unique_non_null: 329
+  sample_values: Entiat School District, Lake Chelan School District, CASHMERE SCHOOL DISTRICT, Cascade School District, Wenatchee School District
+
+Column: DistrictOrganizationId
+  dtype: float64
+  non_null: 20620
+  null: 649
+  unique_non_null: 328
+  sample_values: 100079.0, 100125.0, 100035.0, 100034.0, 100290.0
+  min: 100001.0
+  max: 106989.0
+  mean: 100284.1815227934
+
+Column: SchoolCode
+  dtype: float64
+  non_null: 16057
+  null: 5212
+  unique_non_null: 2406
+  sample_values: 5776.0, 1617.0, 2299.0, 2501.0, 2823.0
+  min: 1502.0
+  max: 5960.0
+  mean: 3592.3622096281997
+
+Column: SchoolName
+  dtype: object
+  non_null: 20637
+  null: 632
+  unique_non_null: 2244
+  sample_values: District Total, Othello Digital Learning, Educational Opportunity Center, Charles Francis Adams High School, Lincoln Middle School
+
+Column: SchoolOrganizationID
+  dtype: float64
+  non_null: 16057
+  null: 5212
+  unique_non_null: 2406
+  sample_values: 107074.0, 100344.0, 100345.0, 100346.0, 100347.0
+  min: 100326.0
+  max: 107075.0
+  mean: 102660.81353926637
+
+Column: CurrentSchoolType
+  dtype: object
+  non_null: 16057
+  null: 5212
+  unique_non_null: 9
+  sample_values: P, A, S, R, J
+
+Column: GradeLevel
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 17
+  sample_values: 3rd Grade, 4th Grade, 5th Grade, 6th Grade, 7th Grade
+
+Column: All Students
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 1685
+  sample_values: 33, 41, 28, 47, 34
+
+Column: Female
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 1132
+  sample_values: 15, 14, 16, 13, 29
+
+Column: Gender X
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 115
+  sample_values: 0, 1, 3, 2, 6
+
+Column: Male
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 1169
+  sample_values: 18, 27, 17, 15, 10
+
+Column: American Indian/Alaskan Native
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 183
+  sample_values: 0, 1, 3, 4, 6
+
+Column: Asian
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 519
+  sample_values: 0, 1, 4, 2, 3
+
+Column: Black/African American
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 361
+  sample_values: 0, 1, 7, 2, 6
+
+Column: Hispanic/Latino of any race(s)
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 862
+  sample_values: 23, 29, 24, 14, 32
+
+Column: Native Hawaiian/Pacific Islander
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 206
+  sample_values: 0, 2, 1, 7, 8
+
+Column: Two or More Races
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 471
+  sample_values: 0, 1, 2, 3, 5
+
+Column: White
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 1132
+  sample_values: 10, 12, 9, 13, 14
+
+Column: English Language Learners
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 645
+  sample_values: 18, 13, 5, 16, 2
+
+Column: Non-English Language Learners
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 1552
+  sample_values: 15, 28, 20, 23, 31
+
+Column: Foster Care
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 91
+  sample_values: 0, 54, 16, 13, 76
+
+Column: Non-Foster Care
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 1222
+  sample_values: 0, 585, 579, 720, 465
+
+Column: Highly Capable
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 484
+  sample_values: 2, 1, 5, 0, 12
+
+Column: Non-Highly Capable
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 1600
+  sample_values: 31, 39, 32, 23, 47
+
+Column: Homeless
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 275
+  sample_values: 0, 1, 2, 7, 15
+
+Column: Non-Homeless
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 1658
+  sample_values: 33, 40, 28, 46, 32
+
+Column: Low Income
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 1127
+  sample_values: 26, 28, 25, 18, 33
+
+Column: Non-Low Income
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 1212
+  sample_values: 7, 13, 8, 10, 14
+
+Column: Migrant
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 253
+  sample_values: 5, 6, 4, 8, 0
+
+Column: Non-Migrant
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 1671
+  sample_values: 28, 35, 24, 41, 26
+
+Column: Military Parent
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 311
+  sample_values: 0, 1, 2, 3, 13
+
+Column: Non-Military Parent
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 1647
+  sample_values: 33, 41, 28, 47, 34
+
+Column: Mobile
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 186
+  sample_values: 0, 1, 8, 2, 3
+
+Column: Non-Mobile
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 1667
+  sample_values: 33, 41, 32, 28, 46
+
+Column: Section 504
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 376
+  sample_values: 2, 4, 3, 5, 36
+
+Column: Non-Section 504
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 1619
+  sample_values: 31, 37, 30, 26, 42
+
+Column: Students with Disabilities
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 596
+  sample_values: 7, 5, 1, 4, 2
+
+Column: Students without Disabilities
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 1534
+  sample_values: 26, 34, 28, 27, 43
+
+Column: DAT
+  dtype: object
+  non_null: 5646
+  null: 15623
+  unique_non_null: 3
+  sample_values: DAT Applied: Foster Care - N < 10, DAT Applied: N < 10, DAT Applied: > 95%
+
+Column: DataAsOf
+  dtype: object
+  non_null: 21269
+  null: 0
+  unique_non_null: 1
+  sample_values: 2025 Nov 24 12:00:00 AM

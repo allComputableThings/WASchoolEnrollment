@@ -45,13 +45,17 @@ def publicData() -> pd.DataFrame :
         2019: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2019-20_School_Year.csv'),
         2020: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2020-21_School_Year.csv'),
         2021: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2021-22_School_Year.csv'),
-        2022: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2022-23_School_Year.csv'),
+        # 2022: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2022-23_School_Year.csv'),
+        2022: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2022-23_School_Year_20260629.csv'),
         #   2023: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2023-24_School_Year_20240130.csv'),
-        2023: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2023-24_School_Year_20240312.csv'),
+        # 2023: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2023-24_School_Year_20240312.csv'),
+        2023: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2023-24_School_Year_20260629.csv'),
         # 2024: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2024-25_School_Year_-_Preliminary_20250203.csv'),
-        2024: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2024-25_School_Year_20250717.csv'),
+        # 2024: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2024-25_School_Year_20250717.csv'),
+        2024: pd.read_csv('OSPI_publicschools/Report_Card_Enrollment_2024-25_School_Year_20260629.csv'),
         #   2022: bellevue2023()
-        2025: pd.read_csv("OSPI_publicschools/Report_Card_Enrollment_2025-26_School_Year_-_Preliminary_20260122.csv")
+        # 2025: pd.read_csv("OSPI_publicschools/Report_Card_Enrollment_2025-26_School_Year_-_Preliminary_20260122.csv")
+        2025: pd.read_csv("OSPI_publicschools/Report_Card_Enrollment_2025-26_School_Year_-_Final_20260629.csv"),
     }
 
     # Normalize data - just want ['Year', SCHOOL_NAME, "Region", "Grade", "Total"]

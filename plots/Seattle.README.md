@@ -32,6 +32,7 @@
  - [Broadview-Thomson K-8 School](Washington_Public/Seattle/school_cohorts/Broadview_Thomson_K_8_School.cohorts.svg)
  - [Bryant Elementary School](Washington_Public/Seattle/school_cohorts/Bryant_Elementary_School.cohorts.svg)
  - [Cascade Parent Partnership Program](Washington_Public/Seattle/school_cohorts/Cascade_Parent_Partnership_Program.cohorts.svg)
+ - [Cascade Parent Partnership Program (Closed after 2022-2023 school year)](Washington_Public/Seattle/school_cohorts/Cascade_Parent_Partnership_Program_(Closed_after_2022_2023_school_year).cohorts.svg)
  - [Cascadia Elementary](Washington_Public/Seattle/school_cohorts/Cascadia_Elementary.cohorts.svg)
  - [Catharine Blaine K-8 School](Washington_Public/Seattle/school_cohorts/Catharine_Blaine_K_8_School.cohorts.svg)
  - [Cedar Park Elementary School](Washington_Public/Seattle/school_cohorts/Cedar_Park_Elementary_School.cohorts.svg)

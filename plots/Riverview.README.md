@@ -24,6 +24,7 @@
  - [Cherry Valley Elementary School](Washington_Public/Riverview/school_cohorts/Cherry_Valley_Elementary_School.cohorts.svg)
  - [Choice](Washington_Public/Riverview/school_cohorts/Choice.cohorts.svg)
  - [Eagle Rock Multiage School](Washington_Public/Riverview/school_cohorts/Eagle_Rock_Multiage_School.cohorts.svg)
+ - [Eagle Rock Multiage School (Closed after 2022-2023 school year)](Washington_Public/Riverview/school_cohorts/Eagle_Rock_Multiage_School_(Closed_after_2022_2023_school_year).cohorts.svg)
  - [PARADE](Washington_Public/Riverview/school_cohorts/PARADE.cohorts.svg)
  - [Stillwater Elementary](Washington_Public/Riverview/school_cohorts/Stillwater_Elementary.cohorts.svg)
  - [Tolt Middle School](Washington_Public/Riverview/school_cohorts/Tolt_Middle_School.cohorts.svg)

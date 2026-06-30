@@ -6,7 +6,7 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-05-08T14:12:37.158995</dc:date>
+    <dc:date>2026-06-29T14:14:43.817619</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -3018,10 +3018,10 @@ z
 " style="fill: #ffffff; stroke: #ffffff; stroke-linejoin: miter"/>
     </g>
     <g id="text_130">
-     <!-- 37 -->
+     <!-- 38 -->
      <g transform="translate(266.618077 298.513221) scale(0.1 -0.1)">
       <use xlink:href="#DejaVuSans-33"/>
-      <use xlink:href="#DejaVuSans-37" transform="translate(63.623047 0)"/>
+      <use xlink:href="#DejaVuSans-38" transform="translate(63.623047 0)"/>
      </g>
     </g>
     <g id="patch_134">
@@ -3033,11 +3033,11 @@ z
 " style="fill: #ffffff; stroke: #ffffff; stroke-linejoin: miter"/>
     </g>
     <g id="text_131">
-     <!-- 184 -->
+     <!-- 183 -->
      <g transform="translate(401.594038 298.513221) scale(0.1 -0.1)">
       <use xlink:href="#DejaVuSans-31"/>
       <use xlink:href="#DejaVuSans-38" transform="translate(63.623047 0)"/>
-      <use xlink:href="#DejaVuSans-34" transform="translate(127.246094 0)"/>
+      <use xlink:href="#DejaVuSans-33" transform="translate(127.246094 0)"/>
      </g>
     </g>
     <g id="patch_135">
@@ -3640,9 +3640,9 @@ z
    <g id="line2d_1">
     <path d="M 10.8 37.938462 
 L 1848.2 37.938462 
-" clip-path="url(#p18b5417155)" style="fill: none; stroke: #000000; stroke-width: 0.5; stroke-linecap: square"/>
+" clip-path="url(#p0db55e5afa)" style="fill: none; stroke: #000000; stroke-width: 0.5; stroke-linecap: square"/>
     <defs>
-     <path id="m0f87f3c5ad" d="M 0 1.5 
+     <path id="m6aa557ccbd" d="M 0 1.5 
 C 0.397805 1.5 0.77937 1.341951 1.06066 1.06066 
 C 1.341951 0.77937 1.5 0.397805 1.5 0 
 C 1.5 -0.397805 1.341951 -0.77937 1.06066 -1.06066 
@@ -3654,9 +3654,9 @@ C -0.77937 1.341951 -0.397805 1.5 0 1.5
 z
 " style="stroke: #000000"/>
     </defs>
-    <g clip-path="url(#p18b5417155)">
-     <use xlink:href="#m0f87f3c5ad" x="10.8" y="37.938462" style="stroke: #000000"/>
-     <use xlink:href="#m0f87f3c5ad" x="1848.2" y="37.938462" style="stroke: #000000"/>
+    <g clip-path="url(#p0db55e5afa)">
+     <use xlink:href="#m6aa557ccbd" x="10.8" y="37.938462" style="stroke: #000000"/>
+     <use xlink:href="#m6aa557ccbd" x="1848.2" y="37.938462" style="stroke: #000000"/>
     </g>
    </g>
    <g id="legend_1">
@@ -3677,7 +3677,7 @@ z
   </g>
  </g>
  <defs>
-  <clipPath id="p18b5417155">
+  <clipPath id="p0db55e5afa">
    <rect x="10.8" y="10.8" width="1837.4" height="352.8"/>
   </clipPath>
  </defs>

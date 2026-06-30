@@ -27,6 +27,7 @@
  - [Mount Si High School](Washington_Public/Snoqualmie_Valley/school_cohorts/Mount_Si_High_School.cohorts.svg)
  - [North Bend Elementary School](Washington_Public/Snoqualmie_Valley/school_cohorts/North_Bend_Elementary_School.cohorts.svg)
  - [SNOQUALMIE VALLEY SCHOOL DISTRICT OPEN DOORS](Washington_Public/Snoqualmie_Valley/school_cohorts/SNOQUALMIE_VALLEY_SCHOOL_DISTRICT_OPEN_DOORS.cohorts.svg)
+ - [SNOQUALMIE VALLEY SCHOOL DISTRICT OPEN DOORS (Closed after 2022-2023 school year)](Washington_Public/Snoqualmie_Valley/school_cohorts/SNOQUALMIE_VALLEY_SCHOOL_DISTRICT_OPEN_DOORS_(Closed_after_2022_2023_school_year).cohorts.svg)
  - [Snoqualmie Access](Washington_Public/Snoqualmie_Valley/school_cohorts/Snoqualmie_Access.cohorts.svg)
  - [Snoqualmie Elementary](Washington_Public/Snoqualmie_Valley/school_cohorts/Snoqualmie_Elementary.cohorts.svg)
  - [Snoqualmie Middle School](Washington_Public/Snoqualmie_Valley/school_cohorts/Snoqualmie_Middle_School.cohorts.svg)

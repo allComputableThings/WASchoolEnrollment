@@ -30,7 +30,9 @@
  - [Chinook Middle School](Washington_Public/Bellevue/school_cohorts/Chinook_Middle_School.cohorts.svg)
  - [Clyde Hill Elementary](Washington_Public/Bellevue/school_cohorts/Clyde_Hill_Elementary.cohorts.svg)
  - [Eastgate Elementary School](Washington_Public/Bellevue/school_cohorts/Eastgate_Elementary_School.cohorts.svg)
+ - [Eastgate Elementary School (Closed after 2022-2023 school year)](Washington_Public/Bellevue/school_cohorts/Eastgate_Elementary_School_(Closed_after_2022_2023_school_year).cohorts.svg)
  - [Enatai Elementary School](Washington_Public/Bellevue/school_cohorts/Enatai_Elementary_School.cohorts.svg)
+ - [Evergreen Transition Program](Washington_Public/Bellevue/school_cohorts/Evergreen_Transition_Program.cohorts.svg)
  - [Highland Middle School](Washington_Public/Bellevue/school_cohorts/Highland_Middle_School.cohorts.svg)
  - [Interlake Senior High School](Washington_Public/Bellevue/school_cohorts/Interlake_Senior_High_School.cohorts.svg)
  - [International School](Washington_Public/Bellevue/school_cohorts/International_School.cohorts.svg)
@@ -50,6 +52,7 @@
  - [Tillicum Middle School](Washington_Public/Bellevue/school_cohorts/Tillicum_Middle_School.cohorts.svg)
  - [Tyee Middle School](Washington_Public/Bellevue/school_cohorts/Tyee_Middle_School.cohorts.svg)
  - [Wilburton Elementary School](Washington_Public/Bellevue/school_cohorts/Wilburton_Elementary_School.cohorts.svg)
+ - [Wilburton Elementary School (Closed after 2022-2023 school year)](Washington_Public/Bellevue/school_cohorts/Wilburton_Elementary_School_(Closed_after_2022_2023_school_year).cohorts.svg)
  - [Woodridge Elementary](Washington_Public/Bellevue/school_cohorts/Woodridge_Elementary.cohorts.svg)
 
 # Private Schools 

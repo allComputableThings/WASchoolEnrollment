@@ -73,7 +73,7 @@
  - [Rose Hill Elementary](Washington_Public/Lake_Washington/school_cohorts/Rose_Hill_Elementary.cohorts.svg)
  - [Rose Hill Middle School](Washington_Public/Lake_Washington/school_cohorts/Rose_Hill_Middle_School.cohorts.svg)
  - [Samantha Smith Elementary](Washington_Public/Lake_Washington/school_cohorts/Samantha_Smith_Elementary.cohorts.svg)
- - [Sammamish River Valley Online School](Washington_Public/Lake_Washington/school_cohorts/Sammamish_River_Valley_Online_School.cohorts.svg)
+ - [Sammamish River Valley Online School (Closed after 2022-2023 school year)](Washington_Public/Lake_Washington/school_cohorts/Sammamish_River_Valley_Online_School_(Closed_after_2022_2023_school_year).cohorts.svg)
  - [Stella Schola](Washington_Public/Lake_Washington/school_cohorts/Stella_Schola.cohorts.svg)
  - [Timberline Middle School](Washington_Public/Lake_Washington/school_cohorts/Timberline_Middle_School.cohorts.svg)
  - [Washington Network for Innovative Careers Skill Center](Washington_Public/Lake_Washington/school_cohorts/Washington_Network_for_Innovative_Careers_Skill_Center.cohorts.svg)
