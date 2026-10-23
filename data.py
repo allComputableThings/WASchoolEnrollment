@@ -198,7 +198,9 @@ def privateData() -> pd.DataFrame :
 
                 'PreK': 'P',
                 'Total Pre-K': 'P',
+                'early learning / pre-kindergarten students ': 'P',
                 'KG': 'K',
+                'Kinders': 'K',
                 'Grade 1': '1',
                 'Grade2': '2',
                 'Grade 2': '2',
@@ -212,6 +214,18 @@ def privateData() -> pd.DataFrame :
                 'Grade 10': '10',
                 'Grade 11': '11',
                 'Grade 12': '12',
+                'Grade 1 ': '1',
+                'Grade 2 ': '2',
+                'Grade 3 ': '3',
+                'Grade 4 ': '4',
+                'Grade 5 ': '5',
+                'Grade 6 ': '6',
+                'Grade 7 ': '7',
+                'Grade 8 ': '8',
+                'Grade 9 ': '9',
+                'Grade 10 ': '10',
+                'Grade 11 ': '11',
+                'Grade 12 ': '12',
                 1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: '7', 8: '8', 9: '9', 10: '10', 11: '11', 12: '12'}
 
     # Final columns, except Grade, Total
@@ -244,6 +258,7 @@ def privateData() -> pd.DataFrame :
     d2023 = pd.read_excel('WA_privateschools/2023 - 2024 Private School Enrollment (website).xlsx')
     # d2024 = pd.read_excel('WA_privateschools/2024-2025 Private School Enrollment Data.xlsx')
     d2024 = pd.read_excel('WA_privateschools/2024-2025 Private School Enrollment Data (Amended March 2025)_0.xlsx')
+    d2025 = pd.read_excel('WA_privateschools/2025 Enrollment Report Submission Tracker (website).xlsx')
 
     def d2018normalized():
         # Normalize 2018 --- Not used. Format has quite a lot difference. Suspicious of the changes
@@ -362,7 +377,11 @@ def privateData() -> pd.DataFrame :
                      # "City": DISTRICT_NAME,  # District
                      "School Name": SCHOOL_NAME,
                      "Address": "Street Address"})
-        print(df.columns)
+        for x in sorted(list(df.columns)):
+            print(repr(x))
+        for g in grades:
+            df[grades]
+        # df['early learning / pre-kindergarten students ']
         df[grades]  # The grade columns should all exist
         df = df.melt(id_vars=set(df.columns) - set(grades), value_vars=grades, var_name="Grade", value_name="Total")
         df['Grade'] = df['Grade'].replace(gradeMap)
@@ -394,6 +413,9 @@ def privateData() -> pd.DataFrame :
     def d2024normalized():
         return _normalize(d2024, year=2024)
 
+    def d2025normalized():
+        return _normalize(d2025, year=2025)
+
     # 2018 seems to have some very different reporting. Not sure it is consistent. Dropped here
     dAll = pd.concat(
         [d2019normalized(),
@@ -401,7 +423,8 @@ def privateData() -> pd.DataFrame :
          d2021normalized(),
          d2022normalized(),
          d2023normalized(),
-         d2024normalized()
+         d2024normalized(),
+         d2025normalized(),
          ]).reindex()
     # dAll = pd.concat([d2022_, ]).reindex()
     # Place the important data in the first columns.

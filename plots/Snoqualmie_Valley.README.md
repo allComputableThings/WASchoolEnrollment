@@ -38,4 +38,5 @@
 
 # Private Schools 
 
+ - [St. Joseph Parish School](Washington_Private/Snoqualmie_Valley/school_cohorts/St._Joseph_Parish_School.cohorts.svg)
  - [Summit Classical Christian School](Washington_Private/Snoqualmie_Valley/school_cohorts/Summit_Classical_Christian_School.cohorts.svg)

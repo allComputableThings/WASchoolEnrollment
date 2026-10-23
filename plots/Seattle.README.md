@@ -136,9 +136,11 @@
 
 # Private Schools 
 
+ - [Academy for Precision Learning](Washington_Private/Seattle/school_cohorts/Academy_for_Precision_Learning.cohorts.svg)
  - [Academy for Precision Learning - Lower School](Washington_Private/Seattle/school_cohorts/Academy_for_Precision_Learning___Lower_School.cohorts.svg)
  - [Academy for Precision Learning - Upper School](Washington_Private/Seattle/school_cohorts/Academy_for_Precision_Learning___Upper_School.cohorts.svg)
  - [Amber Academy, DBA Trillium Academy](Washington_Private/Seattle/school_cohorts/Amber_Academy_DBA_Trillium_Academy.cohorts.svg)
+ - [Ashé Preparatory Academy](Washington_Private/Seattle/school_cohorts/Ashé_Preparatory_Academy.cohorts.svg)
  - [Assumption / St. Bridget School](Washington_Private/Seattle/school_cohorts/Assumption__St._Bridget_School.cohorts.svg)
  - [Assumption/St. Bridget School](Washington_Private/Seattle/school_cohorts/Assumption_St._Bridget_School.cohorts.svg)
  - [Bertschi School](Washington_Private/Seattle/school_cohorts/Bertschi_School.cohorts.svg)
@@ -247,9 +249,11 @@
  - [Torah Academy of the Pacific Northwest](Washington_Private/Seattle/school_cohorts/Torah_Academy_of_the_Pacific_Northwest.cohorts.svg)
  - [Torah Day School of Seattle](Washington_Private/Seattle/school_cohorts/Torah_Day_School_of_Seattle.cohorts.svg)
  - [Torah Say School of Seattle](Washington_Private/Seattle/school_cohorts/Torah_Say_School_of_Seattle.cohorts.svg)
+ - [Trillium Academy](Washington_Private/Seattle/school_cohorts/Trillium_Academy.cohorts.svg)
  - [University Child Development School](Washington_Private/Seattle/school_cohorts/University_Child_Development_School.cohorts.svg)
  - [University Cooperative School](Washington_Private/Seattle/school_cohorts/University_Cooperative_School.cohorts.svg)
  - [University Prep](Washington_Private/Seattle/school_cohorts/University_Prep.cohorts.svg)
+ - [University Preparatory Academy](Washington_Private/Seattle/school_cohorts/University_Preparatory_Academy.cohorts.svg)
  - [University cooperative School](Washington_Private/Seattle/school_cohorts/University_cooperative_School.cohorts.svg)
  - [Villa Academy](Washington_Private/Seattle/school_cohorts/Villa_Academy.cohorts.svg)
  - [West Seattle Montessori School](Washington_Private/Seattle/school_cohorts/West_Seattle_Montessori_School.cohorts.svg)

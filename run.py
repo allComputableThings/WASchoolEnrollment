@@ -102,7 +102,7 @@ def makePlots(public, private=None, schoolDetail=False, addDir=""):
     if schoolDetail:
         # Cohort for school
         for ds in sets:
-            print(ds.path)
+            # print(ds.path)
             for dfBase in [ds.select_school(s) for s in ds.schools]:
                 # print(dfBase.path)
                 dfBase.plotCohortProgression(addDir=f"{addDir}school_cohorts", outputTable=False)
